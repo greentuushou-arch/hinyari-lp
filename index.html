@@ -271,8 +271,36 @@
   @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
   @keyframes scaleUp{from{opacity:0; transform:scale(.96);} to{opacity:1; transform:scale(1);}}
 
-  .result-area{display:none; text-align:left; max-width:720px; margin:8px auto 0; animation:scaleUp .4s ease;}
-  .result-area.show{display:block;}
+  /* --- 結果パーン演出：氷が弾けて診断結果が飛び出す --- */
+  @keyframes iceCrack{
+    0%,100%{transform:translate(0,0) rotate(0);}
+    15%{transform:translate(-6px,0) rotate(-1.2deg);}
+    30%{transform:translate(6px,0) rotate(1.2deg);}
+    45%{transform:translate(-5px,0) rotate(-1deg);}
+    60%{transform:translate(5px,0) rotate(1deg);}
+    75%{transform:translate(-3px,0) rotate(-.5deg);}
+    90%{transform:translate(3px,0) rotate(.5deg);}
+  }
+  .diagnostic.crack{animation:iceCrack .5s ease;}
+  .ice-flash{
+    position:absolute; inset:0; z-index:5; pointer-events:none; border-radius:inherit;
+    background:radial-gradient(circle at 50% 42%, rgba(255,255,255,.95), rgba(175,202,239,.75) 40%, rgba(111,161,226,0) 72%);
+    opacity:0; animation:iceFlashPop .7s ease-out forwards;
+  }
+  @keyframes iceFlashPop{
+    0%{opacity:0; transform:scale(.3);}
+    35%{opacity:1; transform:scale(1.15);}
+    100%{opacity:0; transform:scale(1.6);}
+  }
+  @keyframes resultPop{
+    0%{opacity:0; transform:scale(.75) translateY(10px);}
+    55%{opacity:1; transform:scale(1.04) translateY(0);}
+    75%{transform:scale(.98);}
+    100%{opacity:1; transform:scale(1);}
+  }
+
+  .result-area{display:none; text-align:left; max-width:720px; margin:8px auto 0;}
+  .result-area.show{display:block; animation:resultPop .6s cubic-bezier(.24,1.4,.4,1);}
   .result-card{
     background:linear-gradient(160deg, #fff, var(--frost-50));
     border:1.5px solid var(--glacier-300); border-radius:20px; padding:28px;
@@ -820,12 +848,111 @@ function nextQuestion(answer){
 function showFinalResult(pattern){
   document.getElementById('q2-A').style.display = 'none';
   document.getElementById('q2-B').style.display = 'none';
-  document.getElementById('res-' + pattern).classList.add('show');
-  setDots(3);
-  document.getElementById('res-' + pattern).scrollIntoView({behavior:'smooth', block:'center'});
+
+  const box = document.querySelector('.diagnostic');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const area = document.getElementById('res-' + pattern);
+
+  if(reduceMotion){
+    area.classList.add('show');
+    setDots(3);
+    area.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
+  box.classList.add('crack');
+  const flash = document.createElement('div');
+  flash.className = 'ice-flash';
+  box.appendChild(flash);
+
+  setTimeout(()=>{
+    box.classList.remove('crack');
+    flash.remove();
+    area.classList.add('show');
+    setDots(3);
+    area.scrollIntoView({behavior:'smooth', block:'center'});
+    launchIceBurst(area);
+  }, 480);
+}
+
+/* ===================== 氷の弾け散りバースト ===================== */
+function launchIceBurst(container){
+  const old = container.querySelector('.ice-burst-canvas');
+  if(old) old.remove();
+  const canvas = document.createElement('canvas');
+  canvas.className = 'ice-burst-canvas';
+  canvas.style.cssText = 'position:absolute; pointer-events:none; z-index:20;';
+  container.style.position = container.style.position || 'relative';
+  container.appendChild(canvas);
+
+  const rect = container.getBoundingClientRect();
+  const W = rect.width, H = Math.min(rect.height, 360);
+  const PAD = 60;
+  canvas.width  = W + PAD * 2;
+  canvas.height = H + PAD * 2;
+  canvas.style.width  = canvas.width + 'px';
+  canvas.style.height = canvas.height + 'px';
+  canvas.style.left = -PAD + 'px';
+  canvas.style.top  = -PAD + 'px';
+
+  const ctx = canvas.getContext('2d');
+  const colors = ['#6FA1E2', '#3077D5', '#AFCAEF', '#4585D9', '#ffffff'];
+  const particles = [];
+  const cx = PAD + W / 2, cy = PAD + H * 0.28;
+  for(let i=0; i<70; i++){
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 4 + Math.random() * 9;
+    particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 2,
+      size: 4 + Math.random() * 6,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * Math.PI * 2,
+      vrot: (Math.random() - 0.5) * 0.3,
+      gravity: 0.22 + Math.random() * 0.12,
+      shard: Math.random() < 0.5
+    });
+  }
+  const CW = canvas.width, CH = canvas.height;
+  let frame = 0;
+  function animate(){
+    ctx.clearRect(0, 0, CW, CH);
+    let alive = false;
+    particles.forEach(p=>{
+      p.x += p.vx; p.y += p.vy; p.rot += p.vrot; p.vy += p.gravity; p.vx *= 0.99;
+      if(p.y < CH + 10) alive = true;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = Math.max(0, 1 - frame / 70);
+      if(p.shard){
+        ctx.beginPath();
+        ctx.moveTo(0, -p.size);
+        ctx.lineTo(p.size * 0.6, p.size * 0.6);
+        ctx.lineTo(-p.size * 0.6, p.size * 0.6);
+        ctx.closePath();
+        ctx.fill();
+      }else{
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size * 0.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    });
+    frame++;
+    if(alive && frame < 90){
+      requestAnimationFrame(animate);
+    }else{
+      canvas.remove();
+    }
+  }
+  animate();
 }
 function resetQuiz(){
   document.querySelectorAll('.result-area').forEach(r=>r.classList.remove('show'));
+  document.querySelectorAll('.ice-burst-canvas').forEach(c=>c.remove());
   document.getElementById('q2-A').style.display = 'none';
   document.getElementById('q2-B').style.display = 'none';
   document.getElementById('q1').style.display = 'block';
