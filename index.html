@@ -312,7 +312,13 @@
     background:#fff;
     border:1px solid var(--line); border-radius:4px; padding:32px;
   }
-  .result-header{font-size:1.2rem; font-weight:700; color:var(--arctic-900); margin-bottom:12px; display:flex; align-items:center; gap:12px;}
+  .result-header{
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    gap:12px; margin-bottom:26px;
+  }
+  .result-title{
+    font-size:clamp(1.5rem, 4.2vw, 2.3rem); font-weight:700; color:var(--arctic-900); line-height:1.45;
+  }
   .result-badge{
     display:inline-block; font-size:.68rem; font-weight:700; color:#fff; letter-spacing:.06em;
     background:var(--sand-deep); padding:4px 12px; border-radius:2px;
@@ -607,7 +613,10 @@
 
         <div id="res-pattern1" class="result-area">
           <div class="result-card">
-            <div class="result-header">🐳 氷河期室温 × 極冷キープ タイプ<span class="result-badge ui-font">RESULT</span></div>
+            <div class="result-header">
+              <span class="result-badge ui-font">RESULT</span>
+              <h3 class="result-title display">🐳 氷河期室温 × 極冷キープ タイプ</h3>
+            </div>
             <div class="result-body">エアコンの冷気と相乗効果を生み、27℃の快適室温をキープするハイテク冷感シリーズがベスト。寝返りのたびに背中の熱をどんどん逃がします。</div>
             <div class="prod-grid result-prod-grid" data-products="12,13"></div>
             <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
@@ -616,7 +625,10 @@
 
         <div id="res-pattern2" class="result-area">
           <div class="result-card">
-            <div class="result-header">🌿 エアコン調和 × おなか守り タイプ<span class="result-badge ui-font">RESULT</span></div>
+            <div class="result-header">
+              <span class="result-badge ui-font">RESULT</span>
+              <h3 class="result-title display">🌿 エアコン調和 × おなか守り タイプ</h3>
+            </div>
             <div class="result-body">冷気を優しく遮断しつつ、体に寄り添うガーゼケットや夏用羽毛布団でお腹まわりを守りましょう。冷えと涼しさ、両方の欲張りを叶えます。</div>
             <div class="prod-grid result-prod-grid" data-products="9,11"></div>
             <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
@@ -625,7 +637,10 @@
 
         <div id="res-pattern3" class="result-area">
           <div class="result-card">
-            <div class="result-header">🔥 熱帯雨林 × 瞬間冷却＆水冷 タイプ<span class="result-badge ui-font">RESULT</span></div>
+            <div class="result-header">
+              <span class="result-badge ui-font">RESULT</span>
+              <h3 class="result-title display">🔥 熱帯雨林 × 瞬間冷却＆水冷 タイプ</h3>
+            </div>
             <div class="result-body">エアコンが切れた後の室温上昇には、物理的に頭部や体を冷やす水まくらやアイスモグが救世主に。汗の量に負けない即効クールダウンを。</div>
             <div class="prod-grid result-prod-grid" data-products="3,4"></div>
             <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
@@ -634,7 +649,10 @@
 
         <div id="res-pattern4" class="result-area">
           <div class="result-card">
-            <div class="result-header">🎋 温度乱高下 × 天然の調湿 タイプ<span class="result-badge ui-font">RESULT</span></div>
+            <div class="result-header">
+              <span class="result-badge ui-font">RESULT</span>
+              <h3 class="result-title display">🎋 温度乱高下 × 天然の調湿 タイプ</h3>
+            </div>
             <div class="result-body">外気の変化に合わせて湿度を自動コントロールする「麻」や、抱きしめて涼しいクール抱き枕が最適。汗冷えの不安をやわらげます。</div>
             <div class="prod-grid result-prod-grid" data-products="8,5"></div>
             <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
