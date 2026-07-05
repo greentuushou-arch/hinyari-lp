@@ -256,7 +256,8 @@
   #diagnosis .section-lead{color:rgba(255,255,255,.82);}
   .diagnostic{
     position:relative;
-    background:#fff; border:1px solid var(--line); border-radius:4px;
+    background:linear-gradient(160deg, #FFF7E8, var(--coral-500));
+    border:1px solid var(--coral-600); border-radius:4px;
     padding:52px 36px; text-align:center;
   }
   .diag-progress{display:flex; justify-content:center; gap:8px; margin-bottom:30px;}
@@ -357,6 +358,33 @@
   .prod-link-row{display:flex; align-items:center; gap:4px; margin-top:8px; font-size:.72rem; font-weight:700; color:var(--sand-deep);}
   .prod-rating{display:flex; align-items:center; gap:3px; font-size:.72rem; color:var(--ink-soft); margin-top:4px;}
   .prod-rating .stars{color:var(--sand-deep); letter-spacing:1px; font-size:.78rem;}
+
+  /* ============ 診断結果の商品カード（写真を大きく表示） ============ */
+  .result-prod-grid{grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px;}
+  .result-prod-card{
+    display:flex; flex-direction:column;
+    background:#fff; border:1px solid var(--line); border-radius:2px; overflow:hidden;
+    text-decoration:none; color:var(--ink); transition:.2s; position:relative;
+  }
+  .result-prod-card::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.6) 50%, transparent 60%);
+    transform:translateX(-140%); transition:transform .7s ease;
+  }
+  .result-prod-card:hover::after{transform:translateX(140%);}
+  .result-prod-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-soft); border-color:var(--glacier-500);}
+  .result-prod-photo{
+    aspect-ratio:4/3; background:var(--frost-100);
+    display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+  }
+  .result-prod-photo img{width:100%; height:100%; object-fit:cover;}
+  .result-prod-photo svg{width:60px; height:60px; color:var(--arctic-700);}
+  .result-prod-cool-badge{
+    position:absolute; top:0; left:0; background:var(--arctic-900); color:#fff;
+    font-size:.6rem; font-weight:700; padding:3px 8px; letter-spacing:.02em;
+  }
+  .result-prod-body{padding:16px 18px 20px;}
+  .result-prod-name{font-size:.95rem; font-weight:700; color:var(--arctic-900); line-height:1.5; margin-top:6px;}
 
   /* ============ タイムライン ============ */
   .timeline{display:flex; flex-direction:column; gap:20px;}
@@ -581,7 +609,7 @@
           <div class="result-card">
             <div class="result-header">🐳 氷河期室温 × 極冷キープ タイプ<span class="result-badge ui-font">RESULT</span></div>
             <div class="result-body">エアコンの冷気と相乗効果を生み、27℃の快適室温をキープするハイテク冷感シリーズがベスト。寝返りのたびに背中の熱をどんどん逃がします。</div>
-            <div class="prod-grid" data-products="12,13"></div>
+            <div class="prod-grid result-prod-grid" data-products="12,13"></div>
             <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
           </div>
         </div>
@@ -590,7 +618,7 @@
           <div class="result-card">
             <div class="result-header">🌿 エアコン調和 × おなか守り タイプ<span class="result-badge ui-font">RESULT</span></div>
             <div class="result-body">冷気を優しく遮断しつつ、体に寄り添うガーゼケットや夏用羽毛布団でお腹まわりを守りましょう。冷えと涼しさ、両方の欲張りを叶えます。</div>
-            <div class="prod-grid" data-products="9,11"></div>
+            <div class="prod-grid result-prod-grid" data-products="9,11"></div>
             <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
           </div>
         </div>
@@ -599,7 +627,7 @@
           <div class="result-card">
             <div class="result-header">🔥 熱帯雨林 × 瞬間冷却＆水冷 タイプ<span class="result-badge ui-font">RESULT</span></div>
             <div class="result-body">エアコンが切れた後の室温上昇には、物理的に頭部や体を冷やす水まくらやアイスモグが救世主に。汗の量に負けない即効クールダウンを。</div>
-            <div class="prod-grid" data-products="3,4"></div>
+            <div class="prod-grid result-prod-grid" data-products="3,4"></div>
             <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
           </div>
         </div>
@@ -608,7 +636,7 @@
           <div class="result-card">
             <div class="result-header">🎋 温度乱高下 × 天然の調湿 タイプ<span class="result-badge ui-font">RESULT</span></div>
             <div class="result-body">外気の変化に合わせて湿度を自動コントロールする「麻」や、抱きしめて涼しいクール抱き枕が最適。汗冷えの不安をやわらげます。</div>
-            <div class="prod-grid" data-products="8,5"></div>
+            <div class="prod-grid result-prod-grid" data-products="8,5"></div>
             <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
           </div>
         </div>
@@ -771,6 +799,23 @@ function renderProdCard(id){
   </a>`;
 }
 
+function renderResultProdCard(id){
+  const p = PRODUCTS[id];
+  if(!p) return '';
+  const photo = p.image
+    ? `<img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.outerHTML=catIcon('${p.cat}');">`
+    : catIcon(p.cat);
+  return `
+  <a class="result-prod-card" href="${p.url}" target="_blank" rel="noopener">
+    <div class="result-prod-photo">${p.cool ? '<span class="result-prod-cool-badge ui-font">接触冷感</span>' : ''}${photo}</div>
+    <div class="result-prod-body">
+      <div class="prod-cat ui-font">${p.cat}</div>
+      <div class="result-prod-name">${p.name}</div>
+      <div class="prod-link-row ui-font">商品ページへ →</div>
+    </div>
+  </a>`;
+}
+
 function renderLineupCard(id){
   const p = PRODUCTS[id];
   const thumb = p.image
@@ -787,10 +832,11 @@ function renderLineupCard(id){
 }
 
 try{
-  /* 商品カード類を一括描画 */
+  /* 商品カード類を一括描画（診断結果エリアは写真を大きく見せるカードを使用） */
   document.querySelectorAll('.prod-grid[data-products]').forEach(grid=>{
     const ids = grid.dataset.products.split(',').map(s=>s.trim());
-    grid.innerHTML = ids.map(renderProdCard).join('');
+    const renderer = grid.classList.contains('result-prod-grid') ? renderResultProdCard : renderProdCard;
+    grid.innerHTML = ids.map(renderer).join('');
   });
 
   /* 組み合わせビジュアル（敷きパッド × 掛け布団） */
