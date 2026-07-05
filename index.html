@@ -319,13 +319,10 @@
   .result-title{
     font-family:"Hiragino Kaku Gothic StdN","Hiragino Sans","Hiragino Kaku Gothic ProN","Zen Kaku Gothic New",sans-serif;
     font-weight:900; font-size:clamp(1.9rem, 6vw, 2.9rem); color:var(--arctic-900); line-height:1.35;
-    animation:resultTitleBoing .7s cubic-bezier(.34,1.56,.64,1) .3s both;
+    animation:resultTitleBoing .45s ease-out .3s both;
   }
   @keyframes resultTitleBoing{
-    0%{transform:scale(.35); opacity:0;}
-    45%{transform:scale(1.2); opacity:1;}
-    65%{transform:scale(.9);}
-    82%{transform:scale(1.06);}
+    0%{transform:scale(.96); opacity:0;}
     100%{transform:scale(1); opacity:1;}
   }
   .result-badge{
@@ -624,7 +621,7 @@
           <div class="result-card">
             <div class="result-header">
               <span class="result-badge ui-font">RESULT</span>
-              <h3 class="result-title">🐳 氷河期室温<br>× 極冷キープ タイプ</h3>
+              <h3 class="result-title">氷河期室温<br>× 極冷キープ タイプ</h3>
             </div>
             <div class="result-body">エアコンの冷気と相乗効果を生み、27℃の快適室温をキープするハイテク冷感シリーズがベスト。寝返りのたびに背中の熱をどんどん逃がします。</div>
             <div class="prod-grid result-prod-grid" data-products="12,13"></div>
@@ -636,7 +633,7 @@
           <div class="result-card">
             <div class="result-header">
               <span class="result-badge ui-font">RESULT</span>
-              <h3 class="result-title">🌿 エアコン調和<br>× おなか守り タイプ</h3>
+              <h3 class="result-title">エアコン調和<br>× おなか守り タイプ</h3>
             </div>
             <div class="result-body">冷気を優しく遮断しつつ、体に寄り添うガーゼケットや夏用羽毛布団でお腹まわりを守りましょう。冷えと涼しさ、両方の欲張りを叶えます。</div>
             <div class="prod-grid result-prod-grid" data-products="9,11"></div>
@@ -648,7 +645,7 @@
           <div class="result-card">
             <div class="result-header">
               <span class="result-badge ui-font">RESULT</span>
-              <h3 class="result-title">🔥 熱帯雨林<br>× 瞬間冷却＆水冷 タイプ</h3>
+              <h3 class="result-title">熱帯雨林<br>× 瞬間冷却＆水冷 タイプ</h3>
             </div>
             <div class="result-body">エアコンが切れた後の室温上昇には、物理的に頭部や体を冷やす水まくらやアイスモグが救世主に。汗の量に負けない即効クールダウンを。</div>
             <div class="prod-grid result-prod-grid" data-products="3,4"></div>
@@ -660,7 +657,7 @@
           <div class="result-card">
             <div class="result-header">
               <span class="result-badge ui-font">RESULT</span>
-              <h3 class="result-title">🎋 温度乱高下<br>× 天然の調湿 タイプ</h3>
+              <h3 class="result-title">温度乱高下<br>× 天然の調湿 タイプ</h3>
             </div>
             <div class="result-body">外気の変化に合わせて湿度を自動コントロールする「麻」や、抱きしめて涼しいクール抱き枕が最適。汗冷えの不安をやわらげます。</div>
             <div class="prod-grid result-prod-grid" data-products="8,5"></div>
@@ -979,18 +976,18 @@ function launchIceBurst(container){
   const colors = ['#6FA1E2', '#3077D5', '#AFCAEF', '#4585D9', '#ffffff'];
   const particles = [];
   const cx = PAD + W / 2, cy = PAD + H * 0.28;
-  for(let i=0; i<70; i++){
+  for(let i=0; i<130; i++){
     const angle = Math.random() * Math.PI * 2;
-    const speed = 4 + Math.random() * 9;
+    const speed = 6 + Math.random() * 13;
     particles.push({
       x: cx, y: cy,
       vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - 2,
-      size: 4 + Math.random() * 6,
+      vy: Math.sin(angle) * speed - 3,
+      size: 6 + Math.random() * 9,
       color: colors[Math.floor(Math.random() * colors.length)],
       rot: Math.random() * Math.PI * 2,
-      vrot: (Math.random() - 0.5) * 0.3,
-      gravity: 0.22 + Math.random() * 0.12,
+      vrot: (Math.random() - 0.5) * 0.32,
+      gravity: 0.2 + Math.random() * 0.12,
       shard: Math.random() < 0.5
     });
   }
@@ -1006,7 +1003,7 @@ function launchIceBurst(container){
       ctx.translate(p.x, p.y);
       ctx.rotate(p.rot);
       ctx.fillStyle = p.color;
-      ctx.globalAlpha = Math.max(0, 1 - frame / 70);
+      ctx.globalAlpha = Math.max(0, 1 - frame / 110);
       if(p.shard){
         ctx.beginPath();
         ctx.moveTo(0, -p.size);
@@ -1022,7 +1019,7 @@ function launchIceBurst(container){
       ctx.restore();
     });
     frame++;
-    if(alive && frame < 90){
+    if(alive && frame < 130){
       requestAnimationFrame(animate);
     }else{
       canvas.remove();
