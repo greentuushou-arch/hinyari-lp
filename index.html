@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>熱帯夜も、快適に、寝たいや！夏の快眠寝具特集｜枕と眠りのおやすみショップ！</title>
+<meta name="description" content="熱帯夜でも朝までぐっすり。30秒の睡眠タイプ診断と熱帯夜24時間の攻略ガイドで、あなたにぴったりのひんやり寝具が見つかる夏の快眠特集。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@500;700;800&family=Zen+Maru+Gothic:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* --- 指定カラーパレット --- */
+    --ice-white:#EEF4FC;
+    --frost-50:#EEF4FC;
+    --frost-100:#E3EDFB;
+    --frost-200:#AFCAEF;
+    --glacier-300:#AFCAEF;
+    --glacier-500:#6FA1E2;
+    --glacier-700:#3077D5;
+    --arctic-700:#3077D5;
+    --arctic-800:#265F9E;
+    --arctic-900:#17325A;
+    --mint-400:#4585D9;
+    --mint-600:#3077D5;
+    --coral-500:#EFD3AF;
+    --coral-600:#D9AD74;
+    --gold-400:#EFD3AF;
+    --sand-deep:#B8823F;
+    --ink:#17222B;
+    --ink-soft:#48607A;
+    --paper:rgba(255,255,255,.72);
+    --paper-strong:rgba(255,255,255,.92);
+    --line:rgba(23,58,99,.14);
+    --shadow-ice:0 12px 32px rgba(23,58,99,.12), 0 2px 8px rgba(23,58,99,.07);
+    --shadow-glow:0 0 0 rgba(111,161,226,.5);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth; font-size:18px;}
+  body{
+    font-family:'Noto Sans JP','Zen Maru Gothic',sans-serif;
+    color:var(--ink);
+    line-height:1.8;
+    background:
+      radial-gradient(1200px 600px at 15% -5%, #F5F9FE 0%, rgba(245,249,254,0) 60%),
+      radial-gradient(900px 500px at 100% 10%, #E9F1FC 0%, rgba(233,241,252,0) 55%),
+      linear-gradient(180deg, var(--ice-white) 0%, var(--frost-50) 40%, #E6EFFB 100%);
+    background-attachment:fixed;
+    overflow-x:hidden;
+  }
+  .display{font-family:'Shippori Mincho B1', serif;}
+  .ui-font{font-family:'Zen Maru Gothic','Noto Sans JP',sans-serif;}
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+  .container{max-width:1040px; margin:0 auto; padding:0 20px;}
+
+  /* --- 氷の結晶ちらつき背景装飾（ひんやり演出） --- */
+  .crystal-field{position:fixed; inset:0; pointer-events:none; z-index:0; overflow:hidden;}
+  .crystal{
+    position:absolute; top:-8vh; left:var(--x,50%);
+    width:var(--s,10px); height:var(--s,10px); color:var(--glacier-300);
+    opacity:0; will-change:transform, opacity;
+    animation:crystalFall var(--dur,16s) linear infinite;
+    animation-delay:var(--delay,0s);
+  }
+  .crystal svg{width:100%; height:100%; display:block;}
+  @keyframes crystalFall{
+    0%{ transform:translate(0,0) rotate(0deg); opacity:0; }
+    8%{ opacity:var(--op,.55); }
+    88%{ opacity:var(--op,.55); }
+    100%{ transform:translate(var(--drift,40px), 112vh) rotate(300deg); opacity:0; }
+  }
+
+  /* --- ホバー時に走る「氷の煌めき」シャイン --- */
+  .shine-sweep{position:relative; overflow:hidden;}
+  .shine-sweep::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.55) 50%, transparent 60%);
+    transform:translateX(-140%); transition:transform .7s ease;
+  }
+  .shine-sweep:hover::after{transform:translateX(140%);}
+
+  /* --- CTAボタンの涼感パルス --- */
+  @keyframes coolPulse{
+    0%{box-shadow:0 10px 24px rgba(23,58,99,.28), 0 0 0 0 rgba(111,161,226,.55);}
+    70%{box-shadow:0 10px 24px rgba(23,58,99,.28), 0 0 0 14px rgba(111,161,226,0);}
+    100%{box-shadow:0 10px 24px rgba(23,58,99,.28), 0 0 0 0 rgba(111,161,226,0);}
+  }
+
+  /* --- スクロール涼度ゲージ（サイン要素） --- */
+  .cool-gauge-wrap{
+    position:sticky; top:0; z-index:60; height:5px; width:100%;
+    background:var(--frost-200);
+  }
+  .cool-gauge{height:100%; width:0%; background:linear-gradient(90deg, var(--sand-deep), var(--coral-500) 30%, var(--glacier-500) 65%, var(--arctic-700));
+    transition:width .1s linear;}
+
+  /* --- ミニナビ --- */
+  .mini-nav{
+    position:sticky; top:5px; z-index:55;
+    background:rgba(251,254,255,.82); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .mini-nav-inner{
+    max-width:1040px; margin:0 auto; padding:10px 20px;
+    display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
+  }
+  .mini-nav-inner::-webkit-scrollbar{display:none;}
+  .mini-nav a{
+    flex:none; font-size:.82rem; font-weight:700; color:var(--arctic-700);
+    padding:8px 14px; border-radius:999px; white-space:nowrap;
+    background:var(--frost-100); border:1px solid transparent;
+    transition:.2s;
+  }
+  .mini-nav a:hover{background:var(--glacier-300); border-color:var(--glacier-500);}
+
+  /* --- ハンバーガーメニュー（モバイル専用バー） --- */
+  .mini-nav-bar{display:none;}
+  .nav-brand{font-size:.85rem; font-weight:700; color:var(--arctic-800); letter-spacing:.02em;}
+  .nav-toggle{
+    display:none; align-items:center; justify-content:center;
+    width:40px; height:40px; border-radius:12px; flex:none;
+    border:1.5px solid var(--glacier-300); background:#fff; color:var(--arctic-700);
+    cursor:pointer; transition:.2s;
+  }
+  .nav-toggle:hover{background:var(--frost-100);}
+  .nav-toggle svg{width:20px; height:20px;}
+  .nav-toggle .icon-close{display:none;}
+  .nav-toggle[aria-expanded="true"] .icon-burger{display:none;}
+  .nav-toggle[aria-expanded="true"] .icon-close{display:block;}
+
+  main{position:relative; z-index:1;}
+
+  @media (max-width:640px){
+    .mini-nav-bar{
+      display:flex; align-items:center; justify-content:space-between;
+      max-width:1040px; margin:0 auto; padding:10px 20px;
+    }
+    .nav-toggle{display:inline-flex;}
+    .mini-nav-inner{
+      display:none; flex-direction:column; align-items:stretch;
+      overflow:visible; padding:0 20px 14px; gap:8px;
+    }
+    .mini-nav-inner.open{display:flex; animation:fadeIn .25s ease;}
+    .mini-nav-inner a{width:100%; text-align:center; padding:13px 14px; font-size:.88rem;}
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative; text-align:center;
+    padding:76px 20px 90px;
+    overflow:hidden;
+  }
+  .hero-eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--paper-strong); border:1px solid var(--glacier-300);
+    color:var(--arctic-700); font-weight:700; font-size:.8rem;
+    padding:8px 18px; border-radius:999px; box-shadow:var(--shadow-ice);
+    letter-spacing:.04em;
+  }
+  .hero h1{
+    margin-top:26px;
+    font-size:clamp(2.1rem, 5.2vw, 3.4rem);
+    font-weight:800; color:var(--arctic-900);
+    letter-spacing:.02em; line-height:1.45;
+  }
+  .hero h1 .accent{
+    color:var(--glacier-700);
+    position:relative;
+  }
+  .hero-sub{
+    max-width:620px; margin:22px auto 0; color:var(--ink-soft);
+    font-size:1.02rem; line-height:1.95;
+  }
+  .hero-cta{
+    margin-top:34px; display:inline-flex; gap:14px; flex-wrap:wrap; justify-content:center;
+  }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    font-weight:700; font-size:.95rem; padding:14px 26px; border-radius:999px;
+    border:none; cursor:pointer; text-decoration:none;
+    transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg, var(--glacier-500), var(--arctic-700));
+    color:#fff; box-shadow:0 10px 24px rgba(23,58,99,.28);
+    animation:coolPulse 2.6s ease-out infinite;
+  }
+  .btn-primary:hover{transform:translateY(-3px); box-shadow:0 14px 30px rgba(23,58,99,.34); animation-play-state:paused;}
+  .btn-ghost{
+    background:var(--paper-strong); color:var(--arctic-700);
+    border:1.5px solid var(--glacier-300);
+  }
+  .btn-ghost:hover{background:var(--frost-100); transform:translateY(-2px);}
+
+  .hero-ice-deco{
+    position:absolute; inset:0; z-index:-1;
+    background:
+      radial-gradient(480px 320px at 18% 22%, rgba(111,161,226,.30), rgba(111,161,226,0) 70%),
+      radial-gradient(420px 300px at 84% 12%, rgba(175,202,239,.40), rgba(175,202,239,0) 70%);
+    animation:heroBreeze 8s ease-in-out infinite;
+  }
+  @keyframes heroBreeze{
+    0%,100%{transform:scale(1) translateY(0); opacity:.9;}
+    50%{transform:scale(1.06) translateY(-8px); opacity:1;}
+  }
+
+  /* ============ セクション共通 ============ */
+  section{padding:64px 0;}
+  .section-eyebrow{
+    display:block; text-align:center; font-size:.78rem; font-weight:700;
+    letter-spacing:.14em; color:var(--glacier-700); margin-bottom:10px;
+  }
+  .section-title{
+    text-align:center; font-size:clamp(1.5rem, 3vw, 2rem);
+    color:var(--arctic-900); font-weight:800; margin-bottom:8px; line-height:1.5;
+  }
+  .section-lead{
+    text-align:center; color:var(--ink-soft); max-width:560px; margin:0 auto 40px; font-size:.95rem;
+  }
+
+  /* 氷解ボーダー(シグネチャー要素) */
+  .melt-divider{width:100%; height:46px; display:block; margin-top:-1px;}
+  .melt-divider path{animation:waveBreathe 5s ease-in-out infinite;}
+  @keyframes waveBreathe{
+    0%,100%{transform:translateY(0); opacity:.9;}
+    50%{transform:translateY(3px); opacity:1;}
+  }
+
+  /* ============ 専門家ボックス ============ */
+  .expert-card{
+    background:var(--paper); backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:22px;
+    padding:30px 32px; box-shadow:var(--shadow-ice);
+    display:grid; grid-template-columns:auto 1fr; gap:22px; align-items:flex-start;
+  }
+  .expert-avatar{
+    width:64px; height:64px; border-radius:50%;
+    background:linear-gradient(145deg, var(--glacier-300), var(--arctic-700));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-weight:700; font-size:.75rem; text-align:center; line-height:1.3;
+    box-shadow:0 6px 16px rgba(23,50,90,.25);
+  }
+  .expert-title{font-size:.82rem; color:var(--glacier-700); font-weight:700;}
+  .expert-name{font-size:1.15rem; font-weight:800; color:var(--arctic-900); margin:2px 0 10px;}
+  .expert-comment{color:var(--ink-soft); font-size:.95rem;}
+
+  /* ============ 診断セクション ============ */
+  .diagnostic{
+    position:relative;
+    background:var(--paper); backdrop-filter:blur(14px);
+    border:1px solid var(--line); border-radius:28px;
+    padding:44px 30px; box-shadow:var(--shadow-ice);
+    text-align:center;
+  }
+  .diag-progress{display:flex; justify-content:center; gap:8px; margin-bottom:26px;}
+  .diag-dot{width:8px; height:8px; border-radius:50%; background:var(--frost-200); transition:.3s;}
+  .diag-dot.active{background:var(--glacier-700); width:22px; border-radius:6px;}
+  .quiz-card{display:none; animation:fadeIn .4s ease;}
+  .quiz-card.active{display:block;}
+  .quiz-text{font-size:1.2rem; font-weight:800; color:var(--arctic-900); margin-bottom:26px;}
+  .btn-group{display:flex; gap:16px; justify-content:center; max-width:640px; margin:0 auto; flex-wrap:wrap;}
+  .choice-btn{
+    flex:1 1 260px; padding:20px 20px; font-size:.94rem; font-weight:700;
+    border-radius:16px; cursor:pointer; text-align:left; line-height:1.5;
+    border:1.5px solid var(--glacier-300); background:#fff; color:var(--arctic-900);
+    transition:.2s; position:relative;
+  }
+  .choice-btn:hover{border-color:var(--glacier-700); background:var(--frost-100); transform:translateY(-2px); box-shadow:var(--shadow-ice);}
+  .choice-btn:focus-visible{outline:3px solid var(--mint-400); outline-offset:2px;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+  @keyframes scaleUp{from{opacity:0; transform:scale(.96);} to{opacity:1; transform:scale(1);}}
+
+  .result-area{display:none; text-align:left; max-width:720px; margin:8px auto 0; animation:scaleUp .4s ease;}
+  .result-area.show{display:block;}
+  .result-card{
+    background:linear-gradient(160deg, #fff, var(--frost-50));
+    border:1.5px solid var(--glacier-300); border-radius:20px; padding:28px;
+  }
+  .result-header{font-size:1.25rem; font-weight:800; color:var(--arctic-900); margin-bottom:10px; display:flex; align-items:center; gap:10px;}
+  .result-badge{
+    display:inline-block; font-size:.72rem; font-weight:700; color:#fff;
+    background:var(--sand-deep); padding:3px 10px; border-radius:999px;
+  }
+  .result-body{color:var(--ink-soft); font-size:.94rem; margin-bottom:20px;}
+  .btn-reset{
+    margin-top:18px; background:none; border:1.5px solid var(--line); color:var(--ink-soft);
+    padding:9px 18px; border-radius:999px; font-size:.82rem; font-weight:700; cursor:pointer;
+  }
+  .btn-reset:hover{border-color:var(--glacier-700); color:var(--arctic-700);}
+
+  /* ============ 商品カード（共通コンポーネント） ============ */
+  .prod-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:14px;}
+  .prod-card{
+    display:flex; gap:12px; align-items:center;
+    background:#fff; border:1px solid var(--line); border-radius:16px;
+    padding:10px; text-decoration:none; color:var(--ink);
+    transition:.2s; position:relative; overflow:hidden;
+  }
+  .prod-card::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.6) 50%, transparent 60%);
+    transform:translateX(-140%); transition:transform .7s ease;
+  }
+  .prod-card:hover::after{transform:translateX(140%);}
+  .prod-card:hover{border-color:var(--glacier-500); box-shadow:var(--shadow-ice); transform:translateY(-2px);}
+  .prod-thumb{
+    width:64px; height:64px; flex:none; border-radius:12px; overflow:hidden;
+    background:linear-gradient(160deg, var(--frost-100), var(--glacier-300));
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .prod-thumb img{width:100%; height:100%; object-fit:cover;}
+  .prod-thumb svg{width:32px; height:32px; color:var(--arctic-700);}
+  .prod-cool-badge{
+    position:absolute; top:-2px; left:-2px; background:var(--mint-400); color:#fff;
+    font-size:.58rem; font-weight:800; padding:2px 6px 2px 5px; border-radius:0 0 8px 0;
+    letter-spacing:.02em;
+  }
+  .prod-body{flex:1; min-width:0;}
+  .prod-cat{font-size:.68rem; font-weight:700; color:var(--glacier-700); letter-spacing:.03em;}
+  .prod-name{font-size:.86rem; font-weight:700; color:var(--arctic-900); line-height:1.4; margin-top:2px;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
+  .prod-link-row{display:flex; align-items:center; gap:4px; margin-top:6px; font-size:.75rem; font-weight:700; color:var(--sand-deep);}
+  .prod-rating{display:flex; align-items:center; gap:3px; font-size:.72rem; color:var(--ink-soft); margin-top:4px;}
+  .prod-rating .stars{color:var(--sand-deep); letter-spacing:1px; font-size:.8rem;}
+
+  /* ============ タイムライン ============ */
+  .timeline{display:flex; flex-direction:column; gap:22px;}
+  .timeline-item{
+    background:var(--paper); backdrop-filter:blur(12px);
+    border:1px solid var(--line); border-radius:22px; padding:28px;
+    box-shadow:var(--shadow-ice); position:relative;
+  }
+  .timeline-item::before{
+    content:''; position:absolute; left:0; top:20px; bottom:20px; width:4px;
+    background:linear-gradient(180deg, var(--sand-deep), var(--glacier-700));
+    border-radius:0 4px 4px 0;
+  }
+  .timeline-time{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--arctic-900); color:#fff; padding:6px 16px;
+    border-radius:999px; font-weight:800; font-size:.82rem; margin-bottom:14px;
+  }
+  .timeline-scene{font-size:1.12rem; font-weight:800; color:var(--arctic-900); margin-bottom:10px;}
+  .timeline-mechanism{
+    color:var(--arctic-800); font-size:.88rem; font-weight:700;
+    background:var(--frost-100); padding:12px 16px; border-radius:12px;
+    border-left:3px solid var(--glacier-700); margin-bottom:14px;
+  }
+  .timeline-text{color:var(--ink-soft); font-size:.92rem; margin-bottom:18px;}
+
+  /* ============ Q&A ============ */
+  .qa-container{
+    background:var(--paper); backdrop-filter:blur(12px);
+    border:1px solid var(--line); border-radius:24px; padding:12px 30px;
+    box-shadow:var(--shadow-ice);
+  }
+  .qa-item{border-bottom:1px solid var(--line); padding:26px 0;}
+  .qa-item:last-child{border-bottom:none;}
+  .qa-q{font-size:1.02rem; font-weight:800; color:var(--arctic-900); display:flex; gap:10px; margin-bottom:10px;}
+  .qa-q .mark{color:var(--sand-deep); font-family:'Shippori Mincho B1',serif; font-size:1.2rem;}
+  .qa-a{font-size:.92rem; color:var(--ink-soft); display:flex; gap:10px; line-height:1.85;}
+  .qa-a .mark{color:var(--glacier-700); font-family:'Shippori Mincho B1',serif; font-weight:700; font-size:1.2rem;}
+  .qa-products{margin-top:14px; padding-left:30px;}
+
+  /* ============ 組み合わせ提案 ============ */
+  .combo-box{
+    background:linear-gradient(135deg, #FBF3E7, #F7E7D2);
+    border:1.5px solid var(--coral-600); border-radius:26px; padding:34px;
+    text-align:center;
+  }
+  .combo-box h3{color:var(--arctic-900); font-size:1.35rem; margin-bottom:12px; font-weight:800;}
+  .combo-box > p{color:var(--ink-soft); font-size:.92rem; max-width:620px; margin:0 auto 22px;}
+  .combo-visual{display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:22px; flex-wrap:wrap;}
+  .combo-plus{font-size:1.4rem; color:var(--sand-deep); font-weight:900;}
+
+  /* ============ レビュー ============ */
+  .review-note{
+    max-width:640px; margin:0 auto 28px; text-align:center;
+    background:var(--frost-100); border:1px dashed var(--glacier-500);
+    color:var(--arctic-800); font-size:.82rem; padding:12px 18px; border-radius:12px;
+  }
+  .review-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:18px;}
+  .review-card{
+    background:#fff; border:1px solid var(--line); border-radius:18px; padding:22px;
+    box-shadow:var(--shadow-ice);
+  }
+  .review-stars{color:var(--sand-deep); font-size:1rem; letter-spacing:2px; margin-bottom:10px;}
+  .review-text{font-size:.88rem; color:var(--ink-soft); margin-bottom:14px; min-height:66px;}
+  .review-meta{display:flex; justify-content:space-between; align-items:center; font-size:.75rem; color:var(--ink-soft);}
+  .review-name{font-weight:700; color:var(--arctic-800);}
+  .review-product{font-size:.72rem; color:var(--glacier-700); font-weight:700; margin-top:10px;}
+
+  /* ============ 全品ラインナップ ============ */
+  .lineup-tabs{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:28px;}
+  .lineup-tab{
+    font-size:.78rem; font-weight:700; padding:8px 16px; border-radius:999px;
+    background:#fff; border:1.5px solid var(--line); color:var(--ink-soft); cursor:pointer; transition:.2s;
+  }
+  .lineup-tab.active, .lineup-tab:hover{background:var(--arctic-700); border-color:var(--arctic-700); color:#fff;}
+  .lineup-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:16px;}
+  .lineup-card{
+    position:relative;
+    background:#fff; border:1px solid var(--line); border-radius:18px; overflow:hidden;
+    text-decoration:none; color:var(--ink); transition:.2s; display:block;
+  }
+  .lineup-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-ice); border-color:var(--glacier-500);}
+  .lineup-card::after{
+    content:''; position:absolute; inset:0; pointer-events:none; z-index:1;
+    background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.6) 50%, transparent 60%);
+    transform:translateX(-140%); transition:transform .7s ease;
+  }
+  .lineup-card:hover::after{transform:translateX(140%);}
+  .lineup-thumb{
+    aspect-ratio:1/1; background:linear-gradient(160deg, var(--frost-100), var(--glacier-300));
+    display:flex; align-items:center; justify-content:center; position:relative;
+  }
+  .lineup-thumb img{width:100%; height:100%; object-fit:cover;}
+  .lineup-thumb svg{width:40px; height:40px; color:var(--arctic-700);}
+  .lineup-cat-badge{
+    position:absolute; top:8px; left:8px; background:rgba(23,50,90,.78); color:#fff;
+    font-size:.62rem; font-weight:700; padding:3px 9px; border-radius:999px;
+  }
+  .lineup-body{padding:12px 14px 16px;}
+  .lineup-name{font-size:.82rem; font-weight:700; color:var(--arctic-900); line-height:1.45;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.6em;}
+  .lineup-cool{font-size:.68rem; color:var(--mint-600); font-weight:700; margin-top:6px;}
+
+  footer{
+    text-align:center; padding:50px 20px 70px; color:var(--ink-soft); font-size:.8rem;
+  }
+  footer a{color:var(--arctic-700); font-weight:700; text-decoration:underline;}
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  @media (max-width:640px){
+    .hero{padding:56px 16px 60px;}
+    section{padding:46px 0;}
+    .expert-card{grid-template-columns:1fr; text-align:left;}
+    .expert-avatar{width:52px; height:52px;}
+    .qa-container{padding:8px 18px;}
+    .diagnostic{padding:30px 18px;}
+    .choice-btn{flex:1 1 100%;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important; transition-duration:.01ms !important; scroll-behavior:auto !important;}
+  }
+</style>
+</head>
+<body>
+
+<div class="crystal-field" id="crystalField" aria-hidden="true"></div>
+
+<div class="cool-gauge-wrap"><div class="cool-gauge" id="coolGauge"></div></div>
+
+<nav class="mini-nav">
+  <div class="mini-nav-bar">
+    <span class="nav-brand ui-font">❄ 涼感メニュー</span>
+    <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="メニューを開閉する">
+      <svg class="icon-burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <div class="mini-nav-inner" id="navLinks">
+    <a href="#diagnosis">30秒診断</a>
+    <a href="#timeline">熱帯夜24時</a>
+    <a href="#qa">お悩みQ&amp;A</a>
+    <a href="#combo">最強の組み合わせ</a>
+    <a href="#voice">お客様の声</a>
+    <a href="#lineup">全品ラインナップ</a>
+  </div>
+</nav>
+
+<main>
+
+  <header class="hero">
+    <div class="hero-ice-deco" aria-hidden="true"></div>
+    <div class="container">
+      <span class="hero-eyebrow ui-font">❄ 夏の快眠適正テスト＆お悩み解決特集</span>
+      <h1 class="display">熱帯夜も、<span class="accent">快適に、</span><br class="sp-only">寝たいや！</h1>
+      <p class="hero-sub">「暑くて起きる」のも「冷えすぎてダルい」のも、もう終わりにしませんか。<br>
+      睡眠改善インストラクター監修のもと、あなたの寝室環境に合わせて<br class="sp-only">
+      朝まで深く眠れる、ひんやり寝具の選び方をまるごとご案内します。</p>
+      <div class="hero-cta">
+        <a href="#diagnosis" class="btn btn-primary ui-font">30秒で私の「寝たいや」タイプを診断する</a>
+        <a href="#lineup" class="btn btn-ghost ui-font">商品を先に見る</a>
+      </div>
+    </div>
+  </header>
+
+  <svg class="melt-divider" viewBox="0 0 1200 40" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,0 L1200,0 L1200,18 C1100,32 1000,6 900,20 C800,34 700,10 600,22 C500,34 400,8 300,20 C200,32 100,10 0,22 Z" fill="rgba(255,255,255,0.55)"></path>
+  </svg>
+
+  <div class="container">
+
+    <section id="expert" class="reveal">
+      <div class="expert-card">
+        <div class="expert-avatar ui-font">監修</div>
+        <div>
+          <div class="expert-title ui-font">睡眠改善インストラクター</div>
+          <div class="expert-name">益田桃花 さん</div>
+          <p class="expert-comment">日本の熱帯夜は高い「湿度」が特徴です。エアコンをつけっぱなしにする方、タイマーで切る方、風が苦手な方——寝室の使い方によって選ぶべき寝具の素材はまったく違います。ご自身の睡眠スタイルに合わせて正しく引き算・足し算することが、翌朝のパフォーマンスを守る一番の近道です。</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="diagnosis" class="reveal">
+      <span class="section-eyebrow ui-font">DIAGNOSIS</span>
+      <h2 class="section-title display">まずは30秒で判別。あなたの「寝たいや」タイプ診断</h2>
+      <p class="section-lead">2つの質問に答えるだけで、今夜からの寝具選びがはっきりします。</p>
+
+      <div class="diagnostic">
+        <div class="diag-progress" aria-hidden="true">
+          <span class="diag-dot active" id="dot1"></span>
+          <span class="diag-dot" id="dot2"></span>
+          <span class="diag-dot" id="dot3"></span>
+        </div>
+
+        <div id="q1" class="quiz-card active">
+          <p class="quiz-text">Q1. 夏の夜、エアコン（冷房）はどのように使っていますか？</p>
+          <div class="btn-group">
+            <button class="choice-btn ui-font" onclick="nextQuestion('A')">朝までずーっと<br>「つけっぱなし」派</button>
+            <button class="choice-btn ui-font" onclick="nextQuestion('B')">タイマーで「途中で切る」派<br>／ 苦手だから使わない派</button>
+          </div>
+        </div>
+
+        <div id="q2-A" class="quiz-card">
+          <p class="quiz-text">Q2. エアコンをつけた部屋での、あなたの体質は？</p>
+          <div class="btn-group">
+            <button class="choice-btn ui-font" onclick="showFinalResult('pattern1')">エアコンをつけていても、<br>背中がムレたり汗をかく</button>
+            <button class="choice-btn ui-font" onclick="showFinalResult('pattern2')">夜中や明け方に、<br>肌寒さで目が覚めることがある</button>
+          </div>
+        </div>
+
+        <div id="q2-B" class="quiz-card">
+          <p class="quiz-text">Q2. エアコンが切れた（または使わない）時のあなたの状態は？</p>
+          <div class="btn-group">
+            <button class="choice-btn ui-font" onclick="showFinalResult('pattern3')">とにかく暑がり！<br>大量の汗で目が覚める</button>
+            <button class="choice-btn ui-font" onclick="showFinalResult('pattern4')">暑いけれど、<br>汗冷えやお腹の冷えも心配</button>
+          </div>
+        </div>
+
+        <div id="res-pattern1" class="result-area">
+          <div class="result-card">
+            <div class="result-header">🐳 氷河期室温 × 極冷キープ タイプ<span class="result-badge ui-font">RESULT</span></div>
+            <div class="result-body">エアコンの冷気と相乗効果を生み、27℃の快適室温をキープするハイテク冷感シリーズがベスト。寝返りのたびに背中の熱をどんどん逃がします。</div>
+            <div class="prod-grid" data-products="12,13"></div>
+            <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
+          </div>
+        </div>
+
+        <div id="res-pattern2" class="result-area">
+          <div class="result-card">
+            <div class="result-header">🌿 エアコン調和 × おなか守り タイプ<span class="result-badge ui-font">RESULT</span></div>
+            <div class="result-body">冷気を優しく遮断しつつ、体に寄り添うガーゼケットや夏用羽毛布団でお腹まわりを守りましょう。冷えと涼しさ、両方の欲張りを叶えます。</div>
+            <div class="prod-grid" data-products="9,11"></div>
+            <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
+          </div>
+        </div>
+
+        <div id="res-pattern3" class="result-area">
+          <div class="result-card">
+            <div class="result-header">🔥 熱帯雨林 × 瞬間冷却＆水冷 タイプ<span class="result-badge ui-font">RESULT</span></div>
+            <div class="result-body">エアコンが切れた後の室温上昇には、物理的に頭部や体を冷やす水まくらやアイスモグが救世主に。汗の量に負けない即効クールダウンを。</div>
+            <div class="prod-grid" data-products="3,4"></div>
+            <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
+          </div>
+        </div>
+
+        <div id="res-pattern4" class="result-area">
+          <div class="result-card">
+            <div class="result-header">🎋 温度乱高下 × 天然の調湿 タイプ<span class="result-badge ui-font">RESULT</span></div>
+            <div class="result-body">外気の変化に合わせて湿度を自動コントロールする「麻」や、抱きしめて涼しいクール抱き枕が最適。汗冷えの不安をやわらげます。</div>
+            <div class="prod-grid" data-products="8,5"></div>
+            <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="timeline" class="reveal">
+      <span class="section-eyebrow ui-font">24H TIMELINE</span>
+      <h2 class="section-title display">熱帯夜24時「私はこうして、寝たいや」</h2>
+      <p class="section-lead">時間帯によって、寝苦しさの正体は変わります。原因を知れば、対策はもっとシンプルに。</p>
+
+      <div class="timeline">
+        <article class="timeline-item">
+          <span class="timeline-time ui-font">22:00　入床時：体にこもる「初期熱」</span>
+          <div class="timeline-scene">布団に入った瞬間、背中や頭がモワッと熱い！</div>
+          <div class="timeline-mechanism">🔬 お風呂上がりで上昇した皮膚温度が布団に移動し、素材に熱がこもって発散されないのが原因です。</div>
+          <p class="timeline-text">スムーズな入眠には、脳と体の中心温度（深部体温）を下げることが必要。頭をひんやり落ち着かせる枕や、触れた瞬間に熱を吸い上げる抱き枕で初期熱をリセットしましょう。</p>
+          <div class="prod-grid" data-products="1,6"></div>
+        </article>
+
+        <article class="timeline-item">
+          <span class="timeline-time ui-font">01:00　深夜：タイマー切れによる「湿度スパイク」</span>
+          <div class="timeline-scene">エアコンが切れた途端、猛烈なムシムシ感で目が覚める！</div>
+          <div class="timeline-mechanism">🔬 冷房停止による室温上昇と、睡眠中にコップ1杯分流れる寝汗が布団内に閉じ込められ、湿度が急上昇するのが原因です。</div>
+          <p class="timeline-text">この時間の不快感の正体は温度だけでなく「極端な高湿度」。寝返りのたびに熱を逃がすシーツや、物理的に冷たさを維持できる水まくらが深い眠りを守る盾になります。</p>
+          <div class="prod-grid" data-products="3,13"></div>
+        </article>
+
+        <article class="timeline-item">
+          <span class="timeline-time ui-font">04:00　明け方：外気温低下による「冷えと寝汗のジレンマ」</span>
+          <div class="timeline-scene">エアコンのつけっぱなし、または朝方の冷え込みで肌寒いのに汗ばむ…</div>
+          <div class="timeline-mechanism">🔬 一日で最も外気温が下がる時間帯。冷気が体を冷やす一方、レム睡眠時にかく寝汗が逃げ場を失うのが原因です。</div>
+          <p class="timeline-text">朝方は、寝冷え対策と吸汗速乾の両立が求められるデリケートな時間。冷気を適度に遮りつつ、寝汗の水分だけを驚異的な通気性で外へ逃がす五重ガーゼが体を優しく守ります。</p>
+          <div class="prod-grid" data-products="9,10"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="qa" class="reveal">
+      <span class="section-eyebrow ui-font">Q&amp;A</span>
+      <h2 class="section-title display">みんなの「寝たいや」を叶える、夏の寝具駆け込み寺</h2>
+      <p class="section-lead">よくいただくご質問に、プロの視点でお答えします。</p>
+
+      <div class="qa-container">
+        <div class="qa-item">
+          <div class="qa-q"><span class="mark">Q.</span>冷感寝具って、最初は冷たいけど夜中に生温くなりませんか？</div>
+          <div class="qa-a"><span class="mark">A.</span>おっしゃる通り、一般的な冷感寝具は体熱が移ると温まります。だからこそ重要なのが、熱を吸放出するスピード。エアコンを弱めにつけっぱなしにする環境なら、室温を一定に保つハイテク繊維「The ICE 27」シリーズが夜中の生温さを防ぐ最適解になります。</div>
+          <div class="prod-grid qa-products" data-products="14"></div>
+        </div>
+
+        <div class="qa-item">
+          <div class="qa-q"><span class="mark">Q.</span>エアコンの冷風が苦手。でも何も掛けないと暑いし、どうすれば？</div>
+          <div class="qa-a"><span class="mark">A.</span>冷風が苦手な方は、寝具に「吸湿性と通気性」を求めてください。日本の夏の寝苦しさは温度だけでなく「湿度」が原因。天然の麻を使った敷きパッドや、風を通すガーゼケットならエアコンに頼りすぎなくても布団の中をサラサラに保てます。</div>
+          <div class="prod-grid qa-products" data-products="8,9"></div>
+        </div>
+
+        <div class="qa-item">
+          <div class="qa-q"><span class="mark">Q.</span>子どもと一緒に寝ていますが、大人と子どもで体感温度が違いすぎて困っています。</div>
+          <div class="qa-a"><span class="mark">A.</span>エアコンの温度は暑がりなお子様（またはパパ）に合わせつつ、寒がりなママは「そよ風ケット」や「夏用羽毛布団」でパーソナルに防波堤を作るのがおすすめ。手軽に涼をとれる「ハンディアイスモグ」をベッドに忍ばせておくのも、家族みんなが快適に眠る小ワザです。</div>
+          <div class="prod-grid qa-products" data-products="15"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="combo" class="reveal">
+      <span class="section-eyebrow ui-font">BEST COMBO</span>
+      <h2 class="section-title display">敷きパッド（下）× 掛け布団（上）のサンドイッチが最強</h2>
+      <div class="combo-box">
+        <div class="combo-visual" id="comboVisual"></div>
+        <p>診断結果をベースにしつつ、時間帯ごとの悩みに合わせて「上と下」を賢く組み合わせるのがプロの最適解です。下からは背中の熱を逃がし、上からはエアコンの直風を防ぐ。これぞ最強の「寝たいや」スタイルです。</p>
+        <a href="#lineup" class="btn btn-primary ui-font">自分に合う組み合わせを探す</a>
+      </div>
+    </section>
+
+    <section id="voice" class="reveal">
+      <span class="section-eyebrow ui-font">CUSTOMER'S VOICE</span>
+      <h2 class="section-title display">お客様の声</h2>
+      <p class="section-lead">実際にお使いいただいた方の感想をお届けします。</p>
+
+      <!--
+        【運用メモ：レビューデータの反映方法】
+        実際のレビュー（評価・コメント）データをいただき次第、
+        下記 window.REVIEWS の配列を実データに差し替えてください。
+        現在はレイアウト確認用のサンプル文言です（実在のお客様の声ではありません）。
+      -->
+      <p class="review-note ui-font">※ このセクションは表示レイアウトのサンプルです。実際のレビューデータをいただき次第、内容を反映します。</p>
+      <div class="review-grid" id="reviewGrid"></div>
+    </section>
+
+    <section id="lineup" class="reveal">
+      <span class="section-eyebrow ui-font">ALL ITEMS</span>
+      <h2 class="section-title display">夏のひんやり寝具、全品ラインナップ</h2>
+      <p class="section-lead">気になるカテゴリーから、じっくり選んでみてください。</p>
+
+      <div class="lineup-tabs" id="lineupTabs"></div>
+      <div class="lineup-grid" id="lineupGrid"></div>
+    </section>
+
+  </div>
+
+  <footer>
+    <p class="ui-font">枕と眠りのおやすみショップ！楽天市場店</p>
+    <p style="margin-top:6px;">今夜も、涼しく、気持ちよく、寝たいや。</p>
+    <p style="margin-top:14px;"><a href="https://www.rakuten.co.jp/oyasumi/" target="_blank" rel="noopener">ショップトップページへ →</a></p>
+  </footer>
+
+</main>
+
+<script>
+/* ===================== 商品マスターデータ ===================== */
+/* image: 確認済みの実商品画像がある場合のみURLを設定。
+   未設定の場合はカテゴリー別のアイスキューブ・アイコンを自動表示します。
+   実画像が用意でき次第、この image の値を差し替えるだけで反映されます。 */
+const PRODUCTS = {
+  1:  {name:"王様の夢枕2", cat:"枕", cool:true,  url:"https://item.rakuten.co.jp/oyasumi/s-500410/", image:"https://shop.r10s.jp/oyasumi/cabinet/m104/104-700500-10no1.jpg"},
+  2:  {name:"夏の夜も涼しく眠れる枕", cat:"枕", cool:false, url:"https://item.rakuten.co.jp/oyasumi/160-000151-20/"},
+  3:  {name:"S-sleep エススリープ 新感覚水まくら スタンダードタイプ", cat:"枕", cool:false, url:"https://item.rakuten.co.jp/oyasumi/318-000001-20/"},
+  4:  {name:"MOGU アイスモグ", cat:"枕", cool:false, url:"https://item.rakuten.co.jp/oyasumi/151-000056-11/"},
+  5:  {name:"王様の抱き枕 クール", cat:"抱き枕", cool:false, url:"https://item.rakuten.co.jp/oyasumi/500133/"},
+  6:  {name:"MOGU 気持ちいい抱きまくら", cat:"抱き枕", cool:true, url:"https://item.rakuten.co.jp/oyasumi/511500/"},
+  7:  {name:"MOGU 気持ちいい抱きまくら Lサイズ", cat:"抱き枕", cool:true, url:"https://item.rakuten.co.jp/oyasumi/151-000110-20/"},
+  8:  {name:"麻夢物語 敷きパッド", cat:"敷きパッド", cool:false, url:"https://item.rakuten.co.jp/oyasumi/999-000700-20/"},
+  9:  {name:"Fabric Plus ガーゼケット", cat:"ガーゼケット", cool:false, url:"https://item.rakuten.co.jp/oyasumi/570603/"},
+  10: {name:"そよ風ケット", cat:"ガーゼケット", cool:false, url:"https://item.rakuten.co.jp/oyasumi/196-000760-12/"},
+  11: {name:"夏に使う羽毛布団", cat:"夏用羽毛布団", cool:false, url:"https://item.rakuten.co.jp/oyasumi/251-000250-20/"},
+  12: {name:"The ICE 27（ザ・アイス 27） クールコントロール 肌掛け布団", cat:"肌掛け布団", cool:false, url:"https://item.rakuten.co.jp/oyasumi/196-000300-10/"},
+  13: {name:"The ICE 27（ザ・アイス 27） クールコントロール 敷きパッド", cat:"敷きパッド", cool:false, url:"https://item.rakuten.co.jp/oyasumi/196-000304-10/"},
+  14: {name:"The ICE 27（ザ・アイス 27） クールコントロール 枕カバー", cat:"枕カバー", cool:false, url:"https://item.rakuten.co.jp/oyasumi/196-000308-10/"},
+  15: {name:"MOGU ハンディアイスモグ 2個入", cat:"雑貨", cool:false, url:"https://item.rakuten.co.jp/oyasumi/151-000301-20/"},
+};
+
+/* カテゴリー別アイコン（線画・氷キューブ風） */
+const CAT_ICONS = {
+  "枕": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 18c0-4 4-7 18-7s18 3 18 7v12c0 4-4 7-18 7S6 34 6 30V18Z"/><path d="M17 15c-1 5-1 13 0 18M31 15c1 5 1 13 0 18"/></svg>',
+  "抱き枕": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="10" y="8" width="28" height="32" rx="14"/><path d="M18 18c2 3 2 9 0 12M30 18c-2 3-2 9 0 12"/></svg>',
+  "敷きパッド": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="6" y="12" width="36" height="24" rx="4"/><path d="M6 20h36M14 12v24M24 12v24M34 12v24"/></svg>',
+  "ガーゼケット": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 14c8-6 28-6 36 0v8c-8-6-28-6-36 0v8c8-6 28-6 36 0"/></svg>',
+  "夏用羽毛布団": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 30c0-9 7-16 16-16s16 7 16 16"/><path d="M6 30h36M12 30v6M20 30v6M28 30v6M36 30v6"/></svg>',
+  "肌掛け布団": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="8" y="10" width="32" height="28" rx="6"/><path d="M8 22h32"/></svg>',
+  "枕カバー": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M8 14h32v22a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4V14Z"/><path d="M8 14l16 10 16-10"/></svg>',
+  "雑貨": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6 30 18 42 20 33 29 35 41 24 35 13 41 15 29 6 20 18 18Z"/></svg>',
+};
+
+function catIcon(cat){ return CAT_ICONS[cat] || CAT_ICONS["雑貨"]; }
+
+function renderProdCard(id){
+  const p = PRODUCTS[id];
+  if(!p) return '';
+  const thumb = p.image
+    ? `<img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.outerHTML=catIcon('${p.cat}');">`
+    : catIcon(p.cat);
+  return `
+  <a class="prod-card" href="${p.url}" target="_blank" rel="noopener">
+    <div class="prod-thumb">${p.cool ? '<span class="prod-cool-badge ui-font">接触冷感</span>' : ''}${thumb}</div>
+    <div class="prod-body">
+      <div class="prod-cat ui-font">${p.cat}</div>
+      <div class="prod-name">${p.name}</div>
+      <div class="prod-link-row ui-font">商品ページへ →</div>
+    </div>
+  </a>`;
+}
+
+function renderLineupCard(id){
+  const p = PRODUCTS[id];
+  const thumb = p.image
+    ? `<img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.outerHTML=catIcon('${p.cat}');">`
+    : catIcon(p.cat);
+  return `
+  <a class="lineup-card" href="${p.url}" target="_blank" rel="noopener" data-cat="${p.cat}">
+    <div class="lineup-thumb"><span class="lineup-cat-badge ui-font">${p.cat}</span>${thumb}</div>
+    <div class="lineup-body">
+      <div class="lineup-name">${p.name}</div>
+      ${p.cool ? '<div class="lineup-cool ui-font">❄ 接触冷感素材</div>' : ''}
+    </div>
+  </a>`;
+}
+
+try{
+  /* 商品カード類を一括描画 */
+  document.querySelectorAll('.prod-grid[data-products]').forEach(grid=>{
+    const ids = grid.dataset.products.split(',').map(s=>s.trim());
+    grid.innerHTML = ids.map(renderProdCard).join('');
+  });
+
+  /* 組み合わせビジュアル（敷きパッド × 掛け布団） */
+  document.getElementById('comboVisual').innerHTML =
+    renderProdCard(13) + '<span class="combo-plus">×</span>' + renderProdCard(12);
+
+  /* 全品ラインナップ */
+  const allIds = Object.keys(PRODUCTS);
+  const cats = ["すべて", ...Array.from(new Set(allIds.map(id=>PRODUCTS[id].cat)))];
+  const lineupTabs = document.getElementById('lineupTabs');
+  const lineupGrid = document.getElementById('lineupGrid');
+
+  function renderLineup(filter){
+    const ids = filter === "すべて" ? allIds : allIds.filter(id=>PRODUCTS[id].cat===filter);
+    lineupGrid.innerHTML = ids.map(renderLineupCard).join('');
+  }
+  lineupTabs.innerHTML = cats.map((c,i)=>`<button class="lineup-tab${i===0?' active':''}" data-cat="${c}">${c}</button>`).join('');
+  lineupTabs.addEventListener('click', e=>{
+    const btn = e.target.closest('.lineup-tab');
+    if(!btn) return;
+    lineupTabs.querySelectorAll('.lineup-tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    renderLineup(btn.dataset.cat);
+  });
+  renderLineup("すべて");
+}catch(err){
+  console.error('商品描画でエラーが発生しました:', err);
+}
+
+
+/* ===================== レビュー（サンプル表示） ===================== */
+/* 実データ受領後は、この配列を差し替えるだけでOKです。 */
+window.REVIEWS = [
+  {stars:5, text:"ここに実際のお客様レビューのコメントが入ります。", name:"（お客様データ待ち）", product:"—"},
+  {stars:5, text:"ここに実際のお客様レビューのコメントが入ります。", name:"（お客様データ待ち）", product:"—"},
+  {stars:4, text:"ここに実際のお客様レビューのコメントが入ります。", name:"（お客様データ待ち）", product:"—"},
+];
+try{
+  document.getElementById('reviewGrid').innerHTML = window.REVIEWS.map(r=>`
+    <div class="review-card">
+      <div class="review-stars" aria-label="評価${r.stars}">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+      <div class="review-text">${r.text}</div>
+      <div class="review-meta"><span class="review-name">${r.name}</span></div>
+      <div class="review-product">${r.product}</div>
+    </div>
+  `).join('');
+}catch(err){
+  console.error('レビュー描画でエラーが発生しました:', err);
+}
+
+/* ===================== 診断クイズ ロジック ===================== */
+function setDots(step){
+  document.getElementById('dot1').classList.toggle('active', step>=1);
+  document.getElementById('dot2').classList.toggle('active', step>=2);
+  document.getElementById('dot3').classList.toggle('active', step>=3);
+}
+function nextQuestion(answer){
+  document.getElementById('q1').style.display = 'none';
+  document.getElementById(answer === 'A' ? 'q2-A' : 'q2-B').style.display = 'block';
+  setDots(2);
+}
+function showFinalResult(pattern){
+  document.getElementById('q2-A').style.display = 'none';
+  document.getElementById('q2-B').style.display = 'none';
+  document.getElementById('res-' + pattern).classList.add('show');
+  setDots(3);
+  document.getElementById('res-' + pattern).scrollIntoView({behavior:'smooth', block:'center'});
+}
+function resetQuiz(){
+  document.querySelectorAll('.result-area').forEach(r=>r.classList.remove('show'));
+  document.getElementById('q2-A').style.display = 'none';
+  document.getElementById('q2-B').style.display = 'none';
+  document.getElementById('q1').style.display = 'block';
+  setDots(1);
+  document.getElementById('diagnosis').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ===================== ハンバーガーメニュー ===================== */
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+function closeNav(){
+  navLinks.classList.remove('open');
+  navToggle.setAttribute('aria-expanded','false');
+}
+function toggleNav(){
+  const isOpen = navLinks.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+navToggle.addEventListener('click', toggleNav);
+navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeNav));
+document.addEventListener('click', e=>{
+  if(navLinks.classList.contains('open') && !navLinks.contains(e.target) && !navToggle.contains(e.target)){
+    closeNav();
+  }
+});
+window.addEventListener('resize', ()=>{ if(window.innerWidth > 640) closeNav(); });
+
+/* ===================== ひんやり結晶パーティクル ===================== */
+(function(){
+  const field = document.getElementById('crystalField');
+  if(!field) return;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const count = reduceMotion ? 0 : (window.innerWidth < 640 ? 10 : 18);
+  const crystalSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2v20M4.2 6l15.6 12M19.8 6 4.2 18M12 2l-3 3M12 2l3 3M12 22l-3-3M12 22l3-3M4.2 6l4 .6M4.2 6l1.4-3.8M19.8 6l-4 .6M19.8 6l-1.4-3.8M4.2 18l4-.6M4.2 18l1.4 3.8M19.8 18l-4-.6M19.8 18l-1.4 3.8"/></svg>';
+  let html = '';
+  for(let i=0;i<count;i++){
+    const size = (Math.random()*14+8).toFixed(0);
+    const left = (Math.random()*100).toFixed(1);
+    const duration = (Math.random()*10+14).toFixed(1);
+    const delay = (Math.random()*-20).toFixed(1);
+    const drift = (Math.random()*80-40).toFixed(0);
+    const opacity = (Math.random()*.35+.25).toFixed(2);
+    html += `<span class="crystal" style="--x:${left}%; --s:${size}px; --dur:${duration}s; --delay:${delay}s; --drift:${drift}px; --op:${opacity};">${crystalSVG}</span>`;
+  }
+  field.innerHTML = html;
+})();
+
+/* ===================== スクロール演出 ===================== */
+const gauge = document.getElementById('coolGauge');
+function updateGauge(){
+  const h = document.documentElement;
+  const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+  gauge.style.width = Math.min(100, Math.max(0,pct)) + '%';
+}
+document.addEventListener('scroll', updateGauge, {passive:true});
+updateGauge();
+
+const revealEls = document.querySelectorAll('.reveal');
+if('IntersectionObserver' in window){
+  try{
+    const io = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, {threshold:.12});
+    revealEls.forEach(el=>io.observe(el));
+  }catch(err){
+    revealEls.forEach(el=>el.classList.add('in'));
+  }
+}else{
+  /* 非対応ブラウザではフェードインなしで即表示（コンテンツが消えたままにならないようにする安全策） */
+  revealEls.forEach(el=>el.classList.add('in'));
+}
+/* 万一何らかの理由で数秒後も表示されないセクションがあれば、強制的に表示する保険 */
+setTimeout(()=>{ revealEls.forEach(el=>el.classList.add('in')); }, 2500);
+</script>
+
+</body>
+</html>
