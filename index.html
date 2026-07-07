@@ -160,28 +160,21 @@ a.hy-cta{
   border:1px solid var(--coral-600); border-radius:8px;
   padding:30px 20px; text-align:center;
 }
-.hy-diag-progress{ display:flex; justify-content:center; align-items:flex-end; gap:10px; margin-bottom:24px; }
-
-/* かわいい進捗インジケーター(アイスキャンディー) */
-.hy-pop{
-  position:relative; width:14px; height:22px;
-  border-radius:7px 7px 3px 3px;
-  background:var(--frost-200);
-  transition:transform .25s ease, background .25s ease;
-}
-.hy-pop::after{
-  content:""; position:absolute; left:50%; bottom:-8px; width:3px; height:9px;
-  background:#E7D4B5; border-radius:0 0 2px 2px; margin-left:-1.5px;
-}
-.hy-pop.active{ transform:translateY(-3px) scale(1.08); }
-.hy-pop.active.p1{ background:linear-gradient(180deg,var(--pink-400),var(--pink-600)); }
-.hy-pop.active.p2{ background:linear-gradient(180deg,var(--yellow-400),var(--yellow-600)); }
-.hy-pop.active.p3{ background:linear-gradient(180deg,var(--glacier-500),var(--glacier-700)); }
-
-.hy-quiz-card{ display:none; }
+.hy-quiz-card{ display:none; position:relative; padding-top:34px; }
 .hy-quiz-card.active{ display:block; }
-.hy-quiz-text{ font-size:1.05rem; font-weight:700; color:var(--arctic-900); margin-bottom:20px; }
-.hy-btn-group{ display:flex; flex-direction:column; gap:12px; }
+
+/* 大きくおしゃれに見せる設問番号のウォーターマーク */
+.hy-quiz-num{
+  position:absolute; top:-20px; left:-8px;
+  font-size:6.4rem; font-weight:900; line-height:1;
+  letter-spacing:-.04em;
+  color:var(--glacier-700);
+  opacity:.15;
+  z-index:0; pointer-events:none;
+}
+
+.hy-quiz-text{ position:relative; z-index:1; font-size:1.05rem; font-weight:700; color:var(--arctic-900); margin-bottom:20px; }
+.hy-btn-group{ position:relative; z-index:1; display:flex; flex-direction:column; gap:12px; }
 .hy-choice-btn{
   display:flex; align-items:center; gap:14px;
   padding:16px; font-size:.86rem; font-weight:700; text-align:left; line-height:1.55;
@@ -495,14 +488,9 @@ a.hy-cta{
       <p class="hy-section-lead">2つの質問に答えるだけで、今夜からの寝具選びがはっきりします。</p>
 
       <div class="hy-diagnostic">
-        <div class="hy-diag-progress" aria-hidden="true">
-          <span class="hy-pop p1 active" id="dot1"></span>
-          <span class="hy-pop p2" id="dot2"></span>
-          <span class="hy-pop p3" id="dot3"></span>
-        </div>
-
         <div id="q1" class="hy-quiz-card active">
-          <p class="hy-quiz-text">Q1. 夏の夜、エアコン(冷房)はどのように使っていますか？</p>
+          <span class="hy-quiz-num">Q1</span>
+          <p class="hy-quiz-text">夏の夜、エアコン(冷房)はどのように使っていますか？</p>
           <div class="hy-btn-group">
             <button class="hy-choice-btn" onclick="nextQuestion('A')"><span class="hy-icon hy-icon-wind"><span></span></span><span>朝までずーっと「つけっぱなし」派</span></button>
             <button class="hy-choice-btn" onclick="nextQuestion('B')"><span class="hy-icon hy-icon-moon"></span><span>タイマーで「途中で切る」派 ／ 苦手だから使わない派</span></button>
@@ -510,7 +498,8 @@ a.hy-cta{
         </div>
 
         <div id="q2-A" class="hy-quiz-card">
-          <p class="hy-quiz-text">Q2. エアコンをつけた部屋での、あなたの体質は？</p>
+          <span class="hy-quiz-num">Q2</span>
+          <p class="hy-quiz-text">エアコンをつけた部屋での、あなたの体質は？</p>
           <div class="hy-btn-group">
             <button class="hy-choice-btn" onclick="showFinalResult('pattern1')"><span class="hy-icon hy-icon-drop"></span><span>エアコンをつけていても、背中がムレたり汗をかく</span></button>
             <button class="hy-choice-btn" onclick="showFinalResult('pattern2')"><span class="hy-icon hy-icon-snow"></span><span>夜中や明け方に、肌寒さで目が覚めることがある</span></button>
@@ -518,7 +507,8 @@ a.hy-cta{
         </div>
 
         <div id="q2-B" class="hy-quiz-card">
-          <p class="hy-quiz-text">Q2. エアコンが切れた(または使わない)時のあなたの状態は？</p>
+          <span class="hy-quiz-num">Q2</span>
+          <p class="hy-quiz-text">エアコンが切れた(または使わない)時のあなたの状態は？</p>
           <div class="hy-btn-group">
             <button class="hy-choice-btn" onclick="showFinalResult('pattern3')"><span class="hy-icon hy-icon-sun"></span><span>とにかく暑がり！大量の汗で目が覚める</span></button>
             <button class="hy-choice-btn" onclick="showFinalResult('pattern4')"><span class="hy-icon hy-icon-drop"></span><span>暑いけれど、汗冷えやお腹の冷えも心配</span></button>
@@ -865,15 +855,9 @@ try{
 }
 
 /* ===================== 診断クイズ ロジック ===================== */
-function setDots(step){
-  document.getElementById('dot1').classList.toggle('active', step>=1);
-  document.getElementById('dot2').classList.toggle('active', step>=2);
-  document.getElementById('dot3').classList.toggle('active', step>=3);
-}
 function nextQuestion(answer){
   document.getElementById('q1').classList.remove('active');
   document.getElementById(answer === 'A' ? 'q2-A' : 'q2-B').classList.add('active');
-  setDots(2);
 }
 /* ===================== 診断結果の紙吹雪バースト(一度だけ、ピンク・イエロー・水色) ===================== */
 function burstConfetti(card){
@@ -913,7 +897,6 @@ function showFinalResult(pattern){
   document.getElementById('q2-B').classList.remove('active');
   const area = document.getElementById('res-' + pattern);
   area.classList.add('show');
-  setDots(3);
   area.scrollIntoView({behavior:'smooth', block:'start'});
   const card = area.querySelector('.hy-result-card');
   if(card){ burstConfetti(card); }
@@ -924,7 +907,6 @@ function resetQuiz(){
   document.getElementById('q2-A').classList.remove('active');
   document.getElementById('q2-B').classList.remove('active');
   document.getElementById('q1').classList.add('active');
-  setDots(1);
   document.getElementById('diagnosis').scrollIntoView({behavior:'smooth', block:'start'});
 }
 </script>
