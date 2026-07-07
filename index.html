@@ -37,6 +37,13 @@
   --ink:#141A1F;
   --ink-soft:#5B6B79;
   --line:rgba(20,40,60,.13);
+  /* ワクワク感を出す差し色(ピンク・イエロー) */
+  --pink-100:#FFE3EE;
+  --pink-400:#FF8FB8;
+  --pink-600:#FF5C96;
+  --yellow-100:#FFF3C4;
+  --yellow-400:#FFCB4C;
+  --yellow-600:#F5A623;
 }
 
 *{ box-sizing:border-box; }
@@ -153,23 +160,94 @@ a.hy-cta{
   border:1px solid var(--coral-600); border-radius:8px;
   padding:30px 20px; text-align:center;
 }
-.hy-diag-progress{ display:flex; justify-content:center; gap:8px; margin-bottom:22px; }
-.hy-diag-dot{ width:6px; height:6px; border-radius:50%; background:var(--frost-200); transition:.3s; }
-.hy-diag-dot.active{ background:var(--glacier-700); width:20px; border-radius:3px; }
+.hy-diag-progress{ display:flex; justify-content:center; align-items:flex-end; gap:10px; margin-bottom:24px; }
+
+/* かわいい進捗インジケーター(アイスキャンディー) */
+.hy-pop{
+  position:relative; width:14px; height:22px;
+  border-radius:7px 7px 3px 3px;
+  background:var(--frost-200);
+  transition:transform .25s ease, background .25s ease;
+}
+.hy-pop::after{
+  content:""; position:absolute; left:50%; bottom:-8px; width:3px; height:9px;
+  background:#E7D4B5; border-radius:0 0 2px 2px; margin-left:-1.5px;
+}
+.hy-pop.active{ transform:translateY(-3px) scale(1.08); }
+.hy-pop.active.p1{ background:linear-gradient(180deg,var(--pink-400),var(--pink-600)); }
+.hy-pop.active.p2{ background:linear-gradient(180deg,var(--yellow-400),var(--yellow-600)); }
+.hy-pop.active.p3{ background:linear-gradient(180deg,var(--glacier-500),var(--glacier-700)); }
+
 .hy-quiz-card{ display:none; }
 .hy-quiz-card.active{ display:block; }
-.hy-quiz-text{ font-size:1rem; font-weight:700; color:var(--arctic-900); margin-bottom:20px; }
+.hy-quiz-text{ font-size:1.05rem; font-weight:700; color:var(--arctic-900); margin-bottom:20px; }
 .hy-btn-group{ display:flex; flex-direction:column; gap:12px; }
 .hy-choice-btn{
-  padding:18px; font-size:.86rem; font-weight:700; text-align:left; line-height:1.6;
-  border-radius:4px; border:1.5px solid var(--line); background:#fff; color:var(--arctic-900);
+  display:flex; align-items:center; gap:14px;
+  padding:16px; font-size:.86rem; font-weight:700; text-align:left; line-height:1.55;
+  border-radius:10px; border:1.5px solid var(--line); background:#fff; color:var(--arctic-900);
   cursor:pointer;
 }
-.hy-choice-btn:active{ border-color:var(--arctic-700); }
+.hy-choice-btn:active{ border-color:var(--pink-600); background:var(--pink-100); }
 
-.hy-result-area{ display:none; text-align:left; margin-top:6px; }
+/* ---------- 手作りCSSアイコン(絵文字不使用) ---------- */
+.hy-icon{ flex:none; position:relative; width:30px; height:30px; }
+
+/* 太陽(暑い) */
+.hy-icon-sun{
+  border-radius:50%;
+  background:radial-gradient(circle at 34% 30%, var(--yellow-100), var(--yellow-400) 65%, var(--yellow-600) 100%);
+  box-shadow:0 0 0 5px var(--yellow-100);
+}
+
+/* 雪の結晶(寒い)。かわすいLPの星スパークルと同じ8方向クリップパスを氷色で流用 */
+.hy-icon-snow{
+  background:linear-gradient(160deg,#fff,var(--glacier-300));
+  clip-path:polygon(50% 0%, 61% 32%, 100% 50%, 61% 68%, 50% 100%, 39% 68%, 0% 50%, 39% 32%);
+  filter:drop-shadow(0 1px 1px rgba(23,50,90,.25));
+}
+
+/* しずく(汗・ムレ) */
+.hy-icon-drop{
+  border-radius:50% 50% 50% 0;
+  transform:rotate(45deg);
+  background:linear-gradient(160deg,#EAF4FF,var(--glacier-500));
+  box-shadow:inset -2px -2px 0 rgba(23,50,90,.15);
+}
+
+/* そよ風(エアコンの風) */
+.hy-icon-wind{ background:none; }
+.hy-icon-wind::before,.hy-icon-wind::after,.hy-icon-wind span{
+  content:""; display:block; height:5px; border-radius:3px;
+  background:linear-gradient(90deg,var(--glacier-300),var(--glacier-600));
+}
+.hy-icon-wind::before{ width:26px; margin:4px 0; }
+.hy-icon-wind::after{ width:19px; margin:4px 0 4px 7px; }
+.hy-icon-wind span{ display:block; width:23px; margin:4px 0 0 3px; }
+
+/* 三日月(夜・静か) */
+.hy-icon-moon{
+  border-radius:50%;
+  background:var(--yellow-100);
+  box-shadow:6px -3px 0 0 var(--arctic-800) inset;
+  overflow:hidden;
+}
+
+.hy-result-area{ display:none; text-align:left; margin-top:6px; position:relative; }
 .hy-result-area.show{ display:block; }
-.hy-result-card{ background:#fff; border:1px solid var(--line); border-radius:8px; padding:22px; }
+.hy-result-card{ background:#fff; border:1px solid var(--line); border-radius:8px; padding:22px; position:relative; overflow:hidden; }
+
+/* 診断結果が出た瞬間に一度だけ舞う紙吹雪(ピンク・イエロー・水色) */
+.hy-burst{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:5; }
+.hy-burst-piece{
+  position:absolute; top:-24px; opacity:0;
+  animation-name:hy-burst-fall; animation-timing-function:ease-in;
+  animation-fill-mode:forwards;
+}
+@keyframes hy-burst-fall{
+  0%{ opacity:1; transform:translate(0,0) rotate(0deg); }
+  100%{ opacity:0; transform:translate(var(--hy-drift,0px),var(--hy-fall,300px)) rotate(340deg); }
+}
 .hy-result-header{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; margin-bottom:18px; }
 .hy-result-badge{
   display:inline-block; font-size:.62rem; font-weight:700; color:#fff; letter-spacing:.06em;
@@ -418,32 +496,32 @@ a.hy-cta{
 
       <div class="hy-diagnostic">
         <div class="hy-diag-progress" aria-hidden="true">
-          <span class="hy-diag-dot active" id="dot1"></span>
-          <span class="hy-diag-dot" id="dot2"></span>
-          <span class="hy-diag-dot" id="dot3"></span>
+          <span class="hy-pop p1 active" id="dot1"></span>
+          <span class="hy-pop p2" id="dot2"></span>
+          <span class="hy-pop p3" id="dot3"></span>
         </div>
 
         <div id="q1" class="hy-quiz-card active">
           <p class="hy-quiz-text">Q1. 夏の夜、エアコン(冷房)はどのように使っていますか？</p>
           <div class="hy-btn-group">
-            <button class="hy-choice-btn" onclick="nextQuestion('A')">朝までずーっと「つけっぱなし」派</button>
-            <button class="hy-choice-btn" onclick="nextQuestion('B')">タイマーで「途中で切る」派 ／ 苦手だから使わない派</button>
+            <button class="hy-choice-btn" onclick="nextQuestion('A')"><span class="hy-icon hy-icon-wind"><span></span></span><span>朝までずーっと「つけっぱなし」派</span></button>
+            <button class="hy-choice-btn" onclick="nextQuestion('B')"><span class="hy-icon hy-icon-moon"></span><span>タイマーで「途中で切る」派 ／ 苦手だから使わない派</span></button>
           </div>
         </div>
 
         <div id="q2-A" class="hy-quiz-card">
           <p class="hy-quiz-text">Q2. エアコンをつけた部屋での、あなたの体質は？</p>
           <div class="hy-btn-group">
-            <button class="hy-choice-btn" onclick="showFinalResult('pattern1')">エアコンをつけていても、背中がムレたり汗をかく</button>
-            <button class="hy-choice-btn" onclick="showFinalResult('pattern2')">夜中や明け方に、肌寒さで目が覚めることがある</button>
+            <button class="hy-choice-btn" onclick="showFinalResult('pattern1')"><span class="hy-icon hy-icon-drop"></span><span>エアコンをつけていても、背中がムレたり汗をかく</span></button>
+            <button class="hy-choice-btn" onclick="showFinalResult('pattern2')"><span class="hy-icon hy-icon-snow"></span><span>夜中や明け方に、肌寒さで目が覚めることがある</span></button>
           </div>
         </div>
 
         <div id="q2-B" class="hy-quiz-card">
           <p class="hy-quiz-text">Q2. エアコンが切れた(または使わない)時のあなたの状態は？</p>
           <div class="hy-btn-group">
-            <button class="hy-choice-btn" onclick="showFinalResult('pattern3')">とにかく暑がり！大量の汗で目が覚める</button>
-            <button class="hy-choice-btn" onclick="showFinalResult('pattern4')">暑いけれど、汗冷えやお腹の冷えも心配</button>
+            <button class="hy-choice-btn" onclick="showFinalResult('pattern3')"><span class="hy-icon hy-icon-sun"></span><span>とにかく暑がり！大量の汗で目が覚める</span></button>
+            <button class="hy-choice-btn" onclick="showFinalResult('pattern4')"><span class="hy-icon hy-icon-drop"></span><span>暑いけれど、汗冷えやお腹の冷えも心配</span></button>
           </div>
         </div>
 
@@ -797,6 +875,39 @@ function nextQuestion(answer){
   document.getElementById(answer === 'A' ? 'q2-A' : 'q2-B').classList.add('active');
   setDots(2);
 }
+/* ===================== 診断結果の紙吹雪バースト(一度だけ、ピンク・イエロー・水色) ===================== */
+function burstConfetti(card){
+  const old = card.querySelector('.hy-burst');
+  if(old) old.remove();
+
+  const layer = document.createElement('div');
+  layer.className = 'hy-burst';
+  card.appendChild(layer);
+
+  const fallDistance = card.offsetHeight + 60;
+  const colors = ['#FF8FB8', '#FFCB4C', '#AFCAEF', '#FF5C96', '#6FA1E2'];
+  const count = 30;
+
+  for(let i=0; i<count; i++){
+    const piece = document.createElement('span');
+    piece.className = 'hy-burst-piece';
+    const isRibbon = Math.random() < 0.35;
+    const size = isRibbon ? (3 + Math.random()*2) : (6 + Math.random()*5);
+    piece.style.width = size + 'px';
+    piece.style.height = (isRibbon ? size * 5 : size) + 'px';
+    piece.style.borderRadius = isRibbon ? '2px' : '2px';
+    piece.style.left = (Math.random()*100) + '%';
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animationDuration = (1 + Math.random()*.8) + 's';
+    piece.style.animationDelay = (Math.random()*.3) + 's';
+    piece.style.setProperty('--hy-fall', fallDistance + 'px');
+    piece.style.setProperty('--hy-drift', (Math.random()*60-30) + 'px');
+    layer.appendChild(piece);
+  }
+
+  setTimeout(()=>{ layer.remove(); }, 2400);
+}
+
 function showFinalResult(pattern){
   document.getElementById('q2-A').classList.remove('active');
   document.getElementById('q2-B').classList.remove('active');
@@ -804,9 +915,12 @@ function showFinalResult(pattern){
   area.classList.add('show');
   setDots(3);
   area.scrollIntoView({behavior:'smooth', block:'start'});
+  const card = area.querySelector('.hy-result-card');
+  if(card){ burstConfetti(card); }
 }
 function resetQuiz(){
   document.querySelectorAll('.hy-result-area').forEach(r=>r.classList.remove('show'));
+  document.querySelectorAll('.hy-burst').forEach(b=>b.remove());
   document.getElementById('q2-A').classList.remove('active');
   document.getElementById('q2-B').classList.remove('active');
   document.getElementById('q1').classList.add('active');
