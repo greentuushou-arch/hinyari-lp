@@ -54,7 +54,12 @@ body{
   padding:0;
   font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Hiragino Kaku Gothic StdN",sans-serif;
   color:var(--ink);
-  background:var(--arctic-900);
+  background:
+    radial-gradient(circle at 12% 15%, rgba(255,180,212,.55), transparent 42%),
+    radial-gradient(circle at 88% 12%, rgba(190,165,255,.5), transparent 42%),
+    radial-gradient(circle at 85% 88%, rgba(150,195,255,.5), transparent 42%),
+    radial-gradient(circle at 12% 90%, rgba(255,222,140,.45), transparent 42%),
+    linear-gradient(160deg, #F6EEFF, #EAF2FF);
   line-height:1.85;
   -webkit-text-size-adjust:100%;
 }
@@ -76,7 +81,8 @@ a.hy-cta{
   background:#fff;
   padding:16px 20px;
   text-align:center;
-  border-bottom:3px solid var(--glacier-500);
+  border-bottom:3px solid transparent;
+  border-image:linear-gradient(90deg, var(--pink-400), #B98CFF, var(--glacier-500), var(--yellow-400)) 1;
   font-weight:700;
   font-size:.8rem;
   letter-spacing:.12em;
@@ -98,7 +104,8 @@ a.hy-cta{
   margin:0 0 10px; line-height:1.6;
 }
 .hy-section-title::after{
-  content:''; display:block; width:52px; height:3px; background:var(--glacier-500);
+  content:''; display:block; width:52px; height:3px;
+  background:linear-gradient(90deg, var(--pink-400), #B98CFF, var(--glacier-500));
   margin:14px auto 0; border-radius:2px;
 }
 .hy-section-lead{
@@ -108,8 +115,13 @@ a.hy-cta{
 /* ---------- 1. ファーストビュー ---------- */
 .hy-hero{
   position:relative;
-  background:linear-gradient(160deg, var(--arctic-800), var(--arctic-900));
-  color:#fff;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(255,180,212,.6), transparent 45%),
+    radial-gradient(circle at 90% 15%, rgba(190,165,255,.55), transparent 45%),
+    radial-gradient(circle at 88% 92%, rgba(150,195,255,.55), transparent 45%),
+    radial-gradient(circle at 10% 92%, rgba(255,222,140,.5), transparent 45%),
+    linear-gradient(160deg, #FBF3FF, #EEF4FF);
+  color:var(--arctic-900);
   padding:26px 0 32px;
   text-align:center;
 }
@@ -118,22 +130,22 @@ a.hy-cta{
 .hy-hero-img-frame .hy-hero-img-pc{ display:none; }
 .hy-hero-content{ padding:0 20px; }
 .hy-hero-copy{
-  font-size:.92rem; color:rgba(255,255,255,.85); margin:0 0 22px; line-height:1.9;
+  font-size:.92rem; color:var(--ink-soft); margin:0 0 22px; line-height:1.9;
 }
 .hy-cta-primary{
-  background:linear-gradient(180deg,#fff,var(--frost-100));
-  color:var(--arctic-900);
+  background:linear-gradient(120deg, var(--pink-400), #B98CFF 48%, var(--glacier-500) 90%);
+  color:#fff;
   font-size:1rem;
   padding:18px 20px;
-  box-shadow:0 8px 20px rgba(0,0,0,.25);
+  box-shadow:0 10px 22px rgba(120,90,200,.32);
   border:2px solid #fff;
 }
-.hy-cta-primary .hy-cta-sub{ display:block; font-size:.68rem; font-weight:400; margin-top:4px; color:var(--arctic-800); }
+.hy-cta-primary .hy-cta-sub{ display:block; font-size:.68rem; font-weight:400; margin-top:4px; color:rgba(255,255,255,.9); }
 .hy-cta-ghost{
   margin-top:12px;
-  background:transparent;
-  color:#fff;
-  border:1.5px solid rgba(255,255,255,.6);
+  background:rgba(255,255,255,.6);
+  color:var(--arctic-900);
+  border:1.5px solid rgba(23,50,90,.25);
   font-size:.82rem;
   padding:13px 18px;
 }
@@ -416,7 +428,10 @@ a.hy-cta{
   padding:10px; background:rgba(255,255,255,.96);
   border-top:2px solid var(--glacier-500); box-shadow:0 -3px 10px rgba(0,0,0,.12);
 }
-.hy-sticky-cta a{ font-size:.84rem; padding:13px 6px; background:var(--arctic-900); color:#fff; border:2px solid var(--glacier-500); }
+.hy-sticky-cta a{
+  font-size:.84rem; padding:13px 6px; color:#fff; border:2px solid #fff;
+  background:linear-gradient(120deg, var(--pink-400), #B98CFF 48%, var(--glacier-500) 90%);
+}
 
 /* ==========================================================================
    PCレイアウト (768px以上)
