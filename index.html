@@ -8,771 +8,598 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Zen+Old+Mincho:wght@500;600;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
 <style>
-  :root{
-    /* --- 指定カラーパレット --- */
-    --ice-white:#FFFFFF;
-    --frost-50:#F7FAFD;
-    --frost-100:#EEF4FC;
-    --frost-200:#AFCAEF;
-    --glacier-300:#AFCAEF;
-    --glacier-500:#6FA1E2;
-    --glacier-700:#3077D5;
-    --arctic-700:#3077D5;
-    --arctic-800:#265F9E;
-    --arctic-900:#17325A;
-    --mint-400:#4585D9;
-    --mint-600:#3077D5;
-    --coral-500:#EFD3AF;
-    --coral-600:#D9AD74;
-    --gold-400:#EFD3AF;
-    --sand-deep:#B8823F;
-    --ink:#141A1F;
-    --ink-soft:#5B6B79;
-    --line:rgba(20,40,60,.13);
-    --shadow-soft:0 10px 26px rgba(20,40,60,.08);
-  }
-  *{box-sizing:border-box; margin:0; padding:0;}
-  html{scroll-behavior:smooth; font-size:18px;}
-  body{
-    font-family:'Zen Kaku Gothic New','Noto Sans JP',sans-serif;
-    color:var(--ink);
-    line-height:1.8;
-    background:var(--ice-white);
-    overflow-x:hidden;
-  }
-  .display{font-family:'Zen Old Mincho', serif;}
-  .ui-font{font-family:'Zen Kaku Gothic New','Noto Sans JP',sans-serif;}
-  a{color:inherit;}
-  img{max-width:100%; display:block;}
-  .container{max-width:1080px; margin:0 auto; padding:0 24px;}
+/* ==========================================================================
+   枕と眠りのおやすみショップ！ 夏のひんやり寝具特集ページ
+   - かわすいさんの22周年LPと同じ作り方: CSSは全てこの<style>内にまとめる、
+     中央1カラム(hy-wrap)+外側は色つき背景、モバイルファースト+768px以上で
+     PC向け上書きの1本のメディアクエリ。
+   - 診断ロジック・商品データ・コピーは既存のものをそのまま踏襲。
+   - 見た目(色以外の装飾・アニメーション)は一旦シンプルにしてあり、今後
+     画像差し替えや演出の指示に応じて追加していく想定。
+   ========================================================================== */
 
-  /* --- ひんやり結晶（ヒーロー限定の演出） --- */
-  .crystal-field{position:absolute; inset:0; pointer-events:none; z-index:0; overflow:hidden;}
-  .crystal{
-    position:absolute; top:-8vh; left:var(--x,50%);
-    width:var(--s,10px); height:var(--s,10px); color:var(--glacier-300);
-    opacity:0; will-change:transform, opacity;
-    animation:crystalFall var(--dur,16s) linear infinite;
-    animation-delay:var(--delay,0s);
-  }
-  .crystal svg{width:100%; height:100%; display:block;}
-  @keyframes crystalFall{
-    0%{ transform:translate(0,0) rotate(0deg); opacity:0; }
-    8%{ opacity:var(--op,.5); }
-    88%{ opacity:var(--op,.5); }
-    100%{ transform:translate(var(--drift,40px), 112vh) rotate(300deg); opacity:0; }
-  }
+:root{
+  --ice-white:#FFFFFF;
+  --frost-50:#F7FAFD;
+  --frost-100:#EEF4FC;
+  --frost-200:#AFCAEF;
+  --glacier-300:#AFCAEF;
+  --glacier-500:#6FA1E2;
+  --glacier-700:#3077D5;
+  --arctic-700:#3077D5;
+  --arctic-800:#265F9E;
+  --arctic-900:#17325A;
+  --mint-400:#4585D9;
+  --mint-600:#3077D5;
+  --coral-500:#EFD3AF;
+  --coral-600:#D9AD74;
+  --gold-400:#EFD3AF;
+  --sand-deep:#B8823F;
+  --ink:#141A1F;
+  --ink-soft:#5B6B79;
+  --line:rgba(20,40,60,.13);
+}
 
-  /* --- ホバー時に走る「氷の煌めき」シャイン --- */
-  .shine-sweep{position:relative; overflow:hidden;}
-  .shine-sweep::after{
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.6) 50%, transparent 60%);
-    transform:translateX(-140%); transition:transform .6s ease;
-  }
-  .shine-sweep:hover::after{transform:translateX(140%);}
+*{ box-sizing:border-box; }
 
-  /* --- スクロール涼度ゲージ（サイン要素） --- */
-  .cool-gauge-wrap{
-    position:sticky; top:0; z-index:60; height:3px; width:100%;
-    background:var(--frost-100);
-  }
-  .cool-gauge{height:100%; width:0%; background:linear-gradient(90deg, var(--sand-deep), var(--coral-500) 30%, var(--glacier-500) 65%, var(--arctic-700));
-    transition:width .1s linear;}
+body{
+  margin:0;
+  padding:0;
+  font-family:'Zen Kaku Gothic New','Noto Sans JP',sans-serif;
+  color:var(--ink);
+  background:var(--arctic-900);
+  line-height:1.85;
+  -webkit-text-size-adjust:100%;
+}
+.display{ font-family:'Zen Old Mincho', serif; }
+img{ max-width:100%; display:block; }
 
-  /* --- ミニナビ（スクロールで出現） --- */
-  .mini-nav{
-    position:fixed; top:3px; left:0; right:0; z-index:55;
-    background:rgba(255,255,255,.94); border-bottom:1px solid var(--line);
-    opacity:0; transform:translateY(-14px); pointer-events:none;
-    transition:opacity .35s ease, transform .35s ease;
-  }
-  .mini-nav.visible{opacity:1; transform:translateY(0); pointer-events:auto;}
-  .mini-nav-inner{
-    max-width:1080px; margin:0 auto; padding:16px 24px;
-    display:flex; gap:28px; overflow-x:auto; scrollbar-width:none; justify-content:center;
-  }
-  .mini-nav-inner::-webkit-scrollbar{display:none;}
-  .mini-nav a{
-    flex:none; font-size:.76rem; font-weight:700; color:var(--ink-soft);
-    letter-spacing:.06em; white-space:nowrap; padding:2px 0;
-    border-bottom:1.5px solid transparent; transition:.2s;
-  }
-  .mini-nav a:hover{color:var(--arctic-900); border-color:var(--arctic-700);}
+.hy-wrap{ max-width:750px; margin:0 auto; background:#fff; overflow:hidden; }
+.hy-inner{ padding:0 20px; }
 
-  /* --- ハンバーガーメニュー（モバイル専用バー） --- */
-  .mini-nav-bar{display:none;}
-  .nav-brand{font-size:.78rem; font-weight:700; color:var(--arctic-900); letter-spacing:.1em;}
-  .nav-toggle{
-    display:none; align-items:center; justify-content:center;
-    width:38px; height:38px; border-radius:2px; flex:none;
-    border:1px solid var(--line); background:#fff; color:var(--arctic-900);
-    cursor:pointer; transition:.2s;
-  }
-  .nav-toggle:hover{background:var(--frost-100);}
-  .nav-toggle svg{width:18px; height:18px;}
-  .nav-toggle .icon-close{display:none;}
-  .nav-toggle[aria-expanded="true"] .icon-burger{display:none;}
-  .nav-toggle[aria-expanded="true"] .icon-close{display:block;}
+a.hy-cta{
+  display:block;
+  text-decoration:none;
+  text-align:center;
+  font-weight:700;
+  border-radius:2px;
+}
 
-  main{position:relative; z-index:1;}
+/* ---------- ヘッダー ---------- */
+.hy-header{
+  background:#fff;
+  padding:16px 20px;
+  text-align:center;
+  border-bottom:3px solid var(--glacier-500);
+  font-weight:700;
+  font-size:.8rem;
+  letter-spacing:.12em;
+  color:var(--arctic-900);
+}
 
-  @media (max-width:640px){
-    .mini-nav-bar{
-      display:flex; align-items:center; justify-content:space-between;
-      max-width:1080px; margin:0 auto; padding:14px 20px;
-    }
-    .nav-toggle{display:inline-flex;}
-    .mini-nav-inner{
-      display:none; flex-direction:column; align-items:stretch;
-      overflow:visible; padding:0 20px 16px; gap:14px; justify-content:flex-start;
-    }
-    .mini-nav-inner.open{display:flex; animation:fadeIn .25s ease;}
-    .mini-nav-inner a{width:100%; text-align:left; padding:10px 0; font-size:.86rem; border-bottom:1px solid var(--line);}
-  }
+/* ---------- 共通セクション ---------- */
+.hy-section{ padding:48px 0; }
+.hy-section-frost{ background:var(--frost-50); }
+.hy-section-white{ background:#fff; }
+.hy-section-eyebrow{
+  display:flex; align-items:center; justify-content:center; gap:12px;
+  font-size:.7rem; font-weight:700; letter-spacing:.28em; color:var(--arctic-700);
+  margin-bottom:12px;
+}
+.hy-section-eyebrow::before,.hy-section-eyebrow::after{ content:''; height:1px; width:26px; background:var(--line); }
+.hy-section-title{
+  text-align:center; font-size:1.4rem; font-weight:700; color:var(--arctic-900);
+  margin:0 0 10px; line-height:1.6;
+}
+.hy-section-title::after{
+  content:''; display:block; width:52px; height:3px; background:var(--glacier-500);
+  margin:14px auto 0; border-radius:2px;
+}
+.hy-section-lead{
+  text-align:center; color:var(--ink-soft); font-size:.86rem; margin:16px 0 0;
+}
 
-  /* ============ HERO ============ */
-  .hero{
-    position:relative;
-    overflow:hidden;
-  }
-  .hero-grid{
-    display:grid; grid-template-columns:1fr 1fr; align-items:stretch; min-height:620px;
-  }
-  .hero-photo{
-    position:relative; overflow:hidden; background:var(--frost-100);
-  }
-  .hero-photo img{
-    width:100%; height:100%; object-fit:cover; display:block;
-  }
-  .hero-content{
-    position:relative; text-align:left;
-    padding:60px 56px 60px 64px;
-    display:flex; flex-direction:column; justify-content:center;
-  }
-  .hero-eyebrow{
-    display:inline-flex; align-items:center; gap:14px;
-    color:var(--arctic-700); font-weight:900; font-size:.72rem;
-    letter-spacing:.32em;
-  }
-  .hero-eyebrow::before, .hero-eyebrow::after{content:''; height:1px; width:32px; background:var(--glacier-300);}
-  .hero h1{
-    margin-top:30px;
-    font-size:clamp(2rem, 3.6vw, 3rem);
-    font-weight:700; color:var(--arctic-900);
-    letter-spacing:.02em; line-height:1.5;
-  }
-  .hero h1 .accent{
-    color:var(--glacier-700);
-    position:relative;
-  }
-  .hero-sub{
-    max-width:460px; margin:26px 0 0; color:var(--ink-soft);
-    font-size:.96rem; line-height:1.95;
-  }
-  .hero-cta{
-    margin-top:40px; display:flex; gap:14px; flex-wrap:wrap; justify-content:flex-start;
-  }
-  .btn{
-    display:inline-flex; align-items:center; gap:8px;
-    font-weight:700; font-size:.78rem; padding:18px 34px; border-radius:2px;
-    letter-spacing:.14em; text-transform:uppercase;
-    border:1.5px solid transparent; cursor:pointer; text-decoration:none;
-    transition:transform .18s ease, background .18s ease, color .18s ease, border-color .18s ease;
-  }
-  .btn-primary{
-    background:var(--arctic-900);
-    color:#fff;
-  }
-  .btn-primary:hover{background:var(--arctic-700); transform:translateY(-2px);}
-  .btn-ghost{
-    background:transparent; color:var(--arctic-900);
-    border-color:var(--arctic-900);
-  }
-  .btn-ghost:hover{background:var(--arctic-900); color:#fff; transform:translateY(-2px);}
-  .btn-hero{
-    text-transform:none; text-align:left;
-    font-size:1.15rem; line-height:1.55; letter-spacing:.03em;
-    padding:26px 40px;
-  }
+/* ---------- 1. ファーストビュー ---------- */
+.hy-hero{
+  position:relative;
+  background:linear-gradient(160deg, var(--arctic-800), var(--arctic-900));
+  color:#fff;
+  padding:26px 0 32px;
+  text-align:center;
+}
+.hy-hero-img-frame{ margin:0 0 20px; position:relative; }
+.hy-hero-img-frame img{ width:100%; height:auto; }
+.hy-hero-img-frame .hy-hero-img-pc{ display:none; }
+.hy-hero-content{ padding:0 20px; }
+.hy-hero-copy{
+  font-size:.92rem; color:rgba(255,255,255,.85); margin:0 0 22px; line-height:1.9;
+}
+.hy-cta-primary{
+  background:linear-gradient(180deg,#fff,var(--frost-100));
+  color:var(--arctic-900);
+  font-size:1rem;
+  padding:18px 20px;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
+  border:2px solid #fff;
+}
+.hy-cta-primary .hy-cta-sub{ display:block; font-size:.68rem; font-weight:400; margin-top:4px; color:var(--arctic-800); }
+.hy-cta-ghost{
+  margin-top:12px;
+  background:transparent;
+  color:#fff;
+  border:1.5px solid rgba(255,255,255,.6);
+  font-size:.82rem;
+  padding:13px 18px;
+}
 
-  .hero-ice-deco{
-    position:absolute; inset:0; z-index:-1; pointer-events:none;
-    background:radial-gradient(560px 380px at 100% 0%, rgba(111,161,226,.16), rgba(111,161,226,0) 70%);
-  }
+/* ---------- 専門家ボックス ---------- */
+.hy-expert-card{
+  background:#fff; border:1px solid var(--line); border-radius:6px;
+  padding:22px; display:flex; gap:16px; align-items:flex-start; margin-top:20px;
+}
+.hy-expert-avatar{
+  width:52px; height:52px; border-radius:4px; flex:none;
+  background:var(--arctic-900); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-weight:700; font-size:.68rem; text-align:center;
+}
+.hy-expert-title{ font-size:.72rem; color:var(--glacier-700); font-weight:700; }
+.hy-expert-name{ font-size:1rem; font-weight:700; color:var(--arctic-900); margin:4px 0 8px; }
+.hy-expert-comment{ color:var(--ink-soft); font-size:.85rem; }
 
-  @media (max-width:900px){
-    .hero-grid{grid-template-columns:1fr; min-height:0;}
-    .hero-photo{height:320px;}
-    .hero-photo img{transform:scale(1.35); object-position:38% 62%;}
-    .hero-content{padding:48px 24px 60px; text-align:center; align-items:center;}
-    .hero-eyebrow{justify-content:center;}
-    .hero-sub{margin-left:auto; margin-right:auto;}
-    .hero-cta{justify-content:center;}
-    .btn-hero{text-align:center;}
-  }
+/* ---------- 診断クイズ ---------- */
+.hy-diagnostic{
+  position:relative; margin-top:20px;
+  background:linear-gradient(160deg,#FFF7E8,var(--coral-500));
+  border:1px solid var(--coral-600); border-radius:8px;
+  padding:30px 20px; text-align:center;
+}
+.hy-diag-progress{ display:flex; justify-content:center; gap:8px; margin-bottom:22px; }
+.hy-diag-dot{ width:6px; height:6px; border-radius:50%; background:var(--frost-200); transition:.3s; }
+.hy-diag-dot.active{ background:var(--glacier-700); width:20px; border-radius:3px; }
+.hy-quiz-card{ display:none; }
+.hy-quiz-card.active{ display:block; }
+.hy-quiz-text{ font-size:1rem; font-weight:700; color:var(--arctic-900); margin-bottom:20px; }
+.hy-btn-group{ display:flex; flex-direction:column; gap:12px; }
+.hy-choice-btn{
+  padding:18px; font-size:.86rem; font-weight:700; text-align:left; line-height:1.6;
+  border-radius:4px; border:1.5px solid var(--line); background:#fff; color:var(--arctic-900);
+  cursor:pointer;
+}
+.hy-choice-btn:active{ border-color:var(--arctic-700); }
 
-  /* ============ セクション共通 ============ */
-  section{padding:88px 0;}
-  .section-eyebrow{
-    display:flex; align-items:center; justify-content:center; gap:14px;
-    font-size:.72rem; font-weight:900;
-    letter-spacing:.32em; color:var(--arctic-700); margin-bottom:16px;
-  }
-  .section-eyebrow::before, .section-eyebrow::after{content:''; height:1px; width:32px; background:var(--line);}
-  .section-title{
-    text-align:center; font-size:clamp(1.5rem, 3vw, 2.1rem);
-    color:var(--arctic-900); font-weight:700; margin-bottom:10px; line-height:1.5;
-  }
-  .section-lead{
-    text-align:center; color:var(--ink-soft); max-width:560px; margin:0 auto 48px; font-size:.92rem;
-  }
+.hy-result-area{ display:none; text-align:left; margin-top:6px; }
+.hy-result-area.show{ display:block; }
+.hy-result-card{ background:#fff; border:1px solid var(--line); border-radius:8px; padding:22px; }
+.hy-result-header{ display:flex; flex-direction:column; align-items:center; text-align:center; gap:10px; margin-bottom:18px; }
+.hy-result-badge{
+  display:inline-block; font-size:.62rem; font-weight:700; color:#fff; letter-spacing:.06em;
+  background:var(--sand-deep); padding:4px 12px; border-radius:2px;
+}
+.hy-result-title{ font-size:1.35rem; font-weight:900; color:var(--arctic-900); line-height:1.4; }
+.hy-result-body{ color:var(--ink-soft); font-size:.86rem; margin-bottom:18px; }
+.hy-btn-reset{
+  margin-top:16px; background:none; border:1px solid var(--line); color:var(--ink-soft);
+  padding:9px 16px; border-radius:20px; font-size:.72rem; font-weight:700;
+}
 
-  /* ============ 専門家ボックス ============ */
-  .expert-card{
-    background:#fff; border:1px solid var(--line); border-radius:4px;
-    padding:36px; display:grid; grid-template-columns:auto 1fr; gap:24px; align-items:flex-start;
-  }
-  .expert-avatar{
-    width:60px; height:60px; border-radius:2px;
-    background:var(--arctic-900);
-    display:flex; align-items:center; justify-content:center;
-    color:#fff; font-weight:700; font-size:.72rem; text-align:center; line-height:1.3;
-  }
-  .expert-title{font-size:.78rem; color:var(--glacier-700); font-weight:700; letter-spacing:.04em;}
-  .expert-name{font-size:1.1rem; font-weight:700; color:var(--arctic-900); margin:4px 0 12px;}
-  .expert-comment{color:var(--ink-soft); font-size:.92rem;}
+/* ---------- 商品カード(共通) ---------- */
+.hy-prod-grid{ display:grid; grid-template-columns:1fr; gap:12px; }
+.hy-prod-card{
+  display:flex; gap:12px; align-items:center; text-decoration:none; color:var(--ink);
+  background:#fff; border:1px solid var(--line); border-radius:4px; padding:10px;
+}
+.hy-prod-thumb{
+  width:56px; height:56px; flex:none; border-radius:4px; overflow:hidden;
+  background:var(--frost-100); display:flex; align-items:center; justify-content:center; position:relative;
+}
+.hy-prod-thumb img{ width:100%; height:100%; object-fit:cover; }
+.hy-prod-thumb svg{ width:28px; height:28px; color:var(--arctic-700); }
+.hy-prod-cool-badge{
+  position:absolute; top:0; left:0; background:var(--arctic-900); color:#fff;
+  font-size:.52rem; font-weight:700; padding:2px 5px;
+}
+.hy-prod-body{ flex:1; min-width:0; }
+.hy-prod-cat{ font-size:.62rem; font-weight:700; color:var(--glacier-700); letter-spacing:.04em; }
+.hy-prod-name{ font-size:.82rem; font-weight:700; color:var(--arctic-900); line-height:1.4; margin-top:3px; }
+.hy-prod-link-row{ font-size:.68rem; font-weight:700; color:var(--sand-deep); margin-top:6px; }
 
-  /* ============ 診断セクション ============ */
-  #diagnosis{
-    position:relative;
-    width:100vw; left:50%; right:50%; margin-left:-50vw; margin-right:-50vw;
-    background:linear-gradient(135deg, var(--glacier-700), var(--arctic-900));
-  }
-  #diagnosis .section-eyebrow{color:#fff;}
-  #diagnosis .section-eyebrow::before, #diagnosis .section-eyebrow::after{background:rgba(255,255,255,.4);}
-  #diagnosis .section-title{color:#fff;}
-  #diagnosis .section-lead{color:rgba(255,255,255,.82);}
-  .diagnostic{
-    position:relative;
-    background:linear-gradient(160deg, #FFF7E8, var(--coral-500));
-    border:1px solid var(--coral-600); border-radius:4px;
-    padding:52px 36px; text-align:center;
-  }
-  .diag-progress{display:flex; justify-content:center; gap:8px; margin-bottom:30px;}
-  .diag-dot{width:6px; height:6px; border-radius:50%; background:var(--frost-200); transition:.3s;}
-  .diag-dot.active{background:var(--glacier-700); width:22px; border-radius:3px;}
-  .quiz-card{display:none; animation:fadeIn .4s ease;}
-  .quiz-card.active{display:block;}
-  .quiz-text{font-size:1.15rem; font-weight:700; color:var(--arctic-900); margin-bottom:30px;}
-  .btn-group{display:flex; gap:16px; justify-content:center; max-width:660px; margin:0 auto; flex-wrap:wrap;}
-  .choice-btn{
-    flex:1 1 260px; padding:22px 22px; font-size:.9rem; font-weight:700;
-    border-radius:2px; cursor:pointer; text-align:left; line-height:1.5;
-    border:1.5px solid var(--line); background:#fff; color:var(--arctic-900);
-    transition:.2s; position:relative;
-  }
-  .choice-btn:hover{border-color:var(--arctic-700); box-shadow:var(--shadow-soft); transform:translateY(-2px);}
-  .choice-btn:focus-visible{outline:2px solid var(--mint-400); outline-offset:2px;}
-  @keyframes fadeIn{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
-  @keyframes scaleUp{from{opacity:0; transform:scale(.96);} to{opacity:1; transform:scale(1);}}
+.hy-result-prod-grid{ margin-top:18px; grid-template-columns:1fr 1fr; }
+.hy-result-prod-card{
+  display:flex; flex-direction:column; text-decoration:none; color:var(--ink);
+  background:#fff; border:1px solid var(--line); border-radius:4px; overflow:hidden;
+}
+.hy-result-prod-photo{
+  aspect-ratio:4/3; background:var(--frost-100); position:relative;
+  display:flex; align-items:center; justify-content:center; overflow:hidden;
+}
+.hy-result-prod-photo img{ width:100%; height:100%; object-fit:cover; }
+.hy-result-prod-photo svg{ width:44px; height:44px; color:var(--arctic-700); }
+.hy-result-prod-cool-badge{
+  position:absolute; top:0; left:0; background:var(--arctic-900); color:#fff;
+  font-size:.56rem; font-weight:700; padding:3px 7px;
+}
+.hy-result-prod-body{ padding:12px 12px 14px; }
+.hy-result-prod-name{ font-size:.8rem; font-weight:700; color:var(--arctic-900); line-height:1.5; margin-top:4px; }
 
-  /* --- 結果パーン演出：氷が弾けて診断結果が飛び出す --- */
-  @keyframes iceCrack{
-    0%,100%{transform:translate(0,0) rotate(0);}
-    15%{transform:translate(-6px,0) rotate(-1.2deg);}
-    30%{transform:translate(6px,0) rotate(1.2deg);}
-    45%{transform:translate(-5px,0) rotate(-1deg);}
-    60%{transform:translate(5px,0) rotate(1deg);}
-    75%{transform:translate(-3px,0) rotate(-.5deg);}
-    90%{transform:translate(3px,0) rotate(.5deg);}
-  }
-  .diagnostic.crack{animation:iceCrack .5s ease;}
-  .ice-flash{
-    position:absolute; inset:0; z-index:5; pointer-events:none; border-radius:inherit;
-    background:radial-gradient(circle at 50% 42%, rgba(255,255,255,.95), rgba(175,202,239,.75) 40%, rgba(111,161,226,0) 72%);
-    opacity:0; animation:iceFlashPop .7s ease-out forwards;
-  }
-  @keyframes iceFlashPop{
-    0%{opacity:0; transform:scale(.3);}
-    35%{opacity:1; transform:scale(1.15);}
-    100%{opacity:0; transform:scale(1.6);}
-  }
-  @keyframes resultPop{
-    0%{opacity:0; transform:scale(.75) translateY(10px);}
-    55%{opacity:1; transform:scale(1.04) translateY(0);}
-    75%{transform:scale(.98);}
-    100%{opacity:1; transform:scale(1);}
-  }
+/* ---------- タイムライン ---------- */
+.hy-timeline{ display:flex; flex-direction:column; gap:16px; margin-top:20px; }
+.hy-timeline-item{
+  background:#fff; border:1px solid var(--line); border-radius:8px; padding:20px;
+  border-left:4px solid var(--arctic-700);
+}
+.hy-timeline-time{
+  display:inline-block; background:var(--arctic-900); color:#fff; padding:6px 14px;
+  border-radius:2px; font-weight:700; font-size:.72rem; margin-bottom:12px;
+}
+.hy-timeline-scene{ font-size:.98rem; font-weight:700; color:var(--arctic-900); margin-bottom:10px; }
+.hy-timeline-mechanism{
+  color:var(--arctic-800); font-size:.8rem; font-weight:700;
+  background:var(--frost-100); padding:12px 14px; border-radius:4px;
+  border-left:3px solid var(--glacier-700); margin-bottom:14px;
+}
+.hy-timeline-text{ color:var(--ink-soft); font-size:.84rem; margin-bottom:16px; }
 
-  .result-area{display:none; text-align:left; max-width:720px; margin:8px auto 0; scroll-margin-top:90px;}
-  .result-area.show{display:block; animation:resultPop .6s cubic-bezier(.24,1.4,.4,1);}
-  .result-card{
-    background:#fff;
-    border:1px solid var(--line); border-radius:4px; padding:32px;
-  }
-  .result-header{
-    display:flex; flex-direction:column; align-items:center; text-align:center;
-    gap:12px; margin-bottom:26px;
-  }
-  .result-title{
-    font-family:"Hiragino Kaku Gothic StdN","Hiragino Sans","Hiragino Kaku Gothic ProN","Zen Kaku Gothic New",sans-serif;
-    font-weight:900; font-size:clamp(1.9rem, 6vw, 2.9rem); color:var(--arctic-900); line-height:1.35;
-    animation:resultTitleBoing .45s ease-out .3s both;
-  }
-  @keyframes resultTitleBoing{
-    0%{transform:scale(.96); opacity:0;}
-    100%{transform:scale(1); opacity:1;}
-  }
-  .result-badge{
-    display:inline-block; font-size:.68rem; font-weight:700; color:#fff; letter-spacing:.06em;
-    background:var(--sand-deep); padding:4px 12px; border-radius:2px;
-  }
-  .result-body{color:var(--ink-soft); font-size:.92rem; margin-bottom:22px;}
-  .btn-reset{
-    margin-top:20px; background:none; border:1px solid var(--line); color:var(--ink-soft);
-    padding:10px 20px; border-radius:2px; font-size:.78rem; font-weight:700; cursor:pointer; letter-spacing:.04em;
-  }
-  .btn-reset:hover{border-color:var(--arctic-700); color:var(--arctic-900);}
+/* ---------- Q&A ---------- */
+.hy-qa-container{ margin-top:20px; }
+.hy-qa-item{ border-bottom:1px solid var(--line); padding:20px 0; }
+.hy-qa-item:first-child{ padding-top:0; }
+.hy-qa-item:last-child{ border-bottom:none; }
+.hy-qa-q{ font-size:.92rem; font-weight:700; color:var(--arctic-900); display:flex; gap:10px; margin-bottom:10px; }
+.hy-qa-a{ font-size:.84rem; color:var(--ink-soft); display:flex; gap:10px; line-height:1.9; }
+.hy-qa-mark-q{ color:var(--sand-deep); font-family:'Zen Old Mincho',serif; font-size:1.1rem; flex:none; }
+.hy-qa-mark-a{ color:var(--glacier-700); font-family:'Zen Old Mincho',serif; font-weight:700; font-size:1.1rem; flex:none; }
+.hy-qa-products{ margin-top:14px; }
 
-  /* ============ 商品カード（共通コンポーネント） ============ */
-  .prod-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:14px;}
-  .prod-card{
-    display:flex; gap:14px; align-items:center;
-    background:#fff; border:1px solid var(--line); border-radius:2px;
-    padding:12px; text-decoration:none; color:var(--ink);
-    transition:.2s; position:relative; overflow:hidden;
-  }
-  .prod-card::after{
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.6) 50%, transparent 60%);
-    transform:translateX(-140%); transition:transform .7s ease;
-  }
-  .prod-card:hover::after{transform:translateX(140%);}
-  .prod-card:hover{border-color:var(--glacier-500); box-shadow:var(--shadow-soft); transform:translateY(-2px);}
-  .prod-thumb{
-    width:64px; height:64px; flex:none; border-radius:2px; overflow:hidden;
-    background:var(--frost-100);
-    display:flex; align-items:center; justify-content:center; position:relative;
-  }
-  .prod-thumb img{width:100%; height:100%; object-fit:cover;}
-  .prod-thumb svg{width:30px; height:30px; color:var(--arctic-700);}
-  .prod-cool-badge{
-    position:absolute; top:0; left:0; background:var(--arctic-900); color:#fff;
-    font-size:.56rem; font-weight:700; padding:2px 6px;
-    letter-spacing:.02em;
-  }
-  .prod-body{flex:1; min-width:0;}
-  .prod-cat{font-size:.66rem; font-weight:700; color:var(--glacier-700); letter-spacing:.06em; text-transform:uppercase;}
-  .prod-name{font-size:.85rem; font-weight:700; color:var(--arctic-900); line-height:1.4; margin-top:4px;
-    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;}
-  .prod-link-row{display:flex; align-items:center; gap:4px; margin-top:8px; font-size:.72rem; font-weight:700; color:var(--sand-deep);}
-  .prod-rating{display:flex; align-items:center; gap:3px; font-size:.72rem; color:var(--ink-soft); margin-top:4px;}
-  .prod-rating .stars{color:var(--sand-deep); letter-spacing:1px; font-size:.78rem;}
+/* ---------- 組み合わせ提案 ---------- */
+.hy-combo-box{
+  margin-top:20px; background:#fff; border:1px solid var(--coral-600); border-radius:8px;
+  padding:26px 20px; text-align:center;
+}
+.hy-combo-box h3{ color:var(--arctic-900); font-size:1.05rem; margin:0 0 12px; font-weight:700; }
+.hy-combo-box > p{ color:var(--ink-soft); font-size:.84rem; margin:0 0 20px; }
+.hy-combo-visual{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
+.hy-combo-visual .hy-prod-card{ flex:1 1 140px; }
+.hy-combo-plus{ font-size:1.2rem; color:var(--sand-deep); font-weight:900; }
 
-  /* ============ 診断結果の商品カード（写真を大きく表示） ============ */
-  .result-prod-grid{grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px;}
-  .result-prod-card{
-    display:flex; flex-direction:column;
-    background:#fff; border:1px solid var(--line); border-radius:2px; overflow:hidden;
-    text-decoration:none; color:var(--ink); transition:.2s; position:relative;
-  }
-  .result-prod-card::after{
-    content:''; position:absolute; inset:0; pointer-events:none;
-    background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.6) 50%, transparent 60%);
-    transform:translateX(-140%); transition:transform .7s ease;
-  }
-  .result-prod-card:hover::after{transform:translateX(140%);}
-  .result-prod-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-soft); border-color:var(--glacier-500);}
-  .result-prod-photo{
-    aspect-ratio:4/3; background:var(--frost-100);
-    display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
-  }
-  .result-prod-photo img{width:100%; height:100%; object-fit:cover;}
-  .result-prod-photo svg{width:60px; height:60px; color:var(--arctic-700);}
-  .result-prod-cool-badge{
-    position:absolute; top:0; left:0; background:var(--arctic-900); color:#fff;
-    font-size:.6rem; font-weight:700; padding:3px 8px; letter-spacing:.02em;
-  }
-  .result-prod-body{padding:16px 18px 20px;}
-  .result-prod-name{font-size:.95rem; font-weight:700; color:var(--arctic-900); line-height:1.5; margin-top:6px;}
+/* ---------- レビュー ---------- */
+.hy-review-note{
+  margin-top:20px; text-align:center; background:var(--frost-100); border:1px dashed var(--glacier-500);
+  color:var(--arctic-800); font-size:.74rem; padding:12px 16px; border-radius:4px;
+}
+.hy-review-grid{ display:grid; grid-template-columns:1fr; gap:14px; margin-top:16px; }
+.hy-review-card{ background:#fff; border:1px solid var(--line); border-radius:6px; padding:18px; }
+.hy-review-stars{ color:var(--sand-deep); font-size:.92rem; letter-spacing:2px; margin-bottom:10px; }
+.hy-review-text{ font-size:.82rem; color:var(--ink-soft); margin-bottom:12px; }
+.hy-review-meta{ display:flex; justify-content:space-between; font-size:.7rem; color:var(--ink-soft); }
+.hy-review-name{ font-weight:700; color:var(--arctic-800); }
+.hy-review-product{ font-size:.68rem; color:var(--glacier-700); font-weight:700; margin-top:8px; }
 
-  /* ============ タイムライン ============ */
-  .timeline{display:flex; flex-direction:column; gap:20px;}
-  .timeline-item{
-    background:#fff;
-    border:1px solid var(--line); border-radius:4px; padding:32px;
-    position:relative;
-  }
-  .timeline-item::before{
-    content:''; position:absolute; left:0; top:24px; bottom:24px; width:3px;
-    background:var(--arctic-700);
-  }
-  .timeline-time{
-    display:inline-flex; align-items:center; gap:8px;
-    background:var(--arctic-900); color:#fff; padding:6px 16px;
-    border-radius:2px; font-weight:700; font-size:.78rem; letter-spacing:.04em; margin-bottom:16px;
-  }
-  .timeline-scene{font-size:1.08rem; font-weight:700; color:var(--arctic-900); margin-bottom:12px;}
-  .timeline-mechanism{
-    color:var(--arctic-800); font-size:.86rem; font-weight:700;
-    background:var(--frost-100); padding:14px 18px; border-radius:2px;
-    border-left:3px solid var(--glacier-700); margin-bottom:16px;
-  }
-  .timeline-text{color:var(--ink-soft); font-size:.9rem; margin-bottom:20px;}
+/* ---------- 全品ラインナップ ---------- */
+.hy-lineup-tabs{
+  display:flex; gap:16px; overflow-x:auto; margin-top:20px; margin-bottom:20px;
+  border-bottom:1px solid var(--line); padding-bottom:2px;
+}
+.hy-lineup-tab{
+  flex:none; font-size:.74rem; font-weight:700; padding:8px 2px; background:none;
+  border:none; border-bottom:2px solid transparent; color:var(--ink-soft); white-space:nowrap;
+}
+.hy-lineup-tab.active{ color:var(--arctic-900); border-color:var(--arctic-700); }
+.hy-lineup-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.hy-lineup-card{ background:#fff; border:1px solid var(--line); border-radius:4px; overflow:hidden; text-decoration:none; color:var(--ink); }
+.hy-lineup-thumb{ aspect-ratio:1/1; background:var(--frost-100); display:flex; align-items:center; justify-content:center; position:relative; }
+.hy-lineup-thumb img{ width:100%; height:100%; object-fit:cover; }
+.hy-lineup-thumb svg{ width:34px; height:34px; color:var(--arctic-700); }
+.hy-lineup-cat-badge{
+  position:absolute; top:8px; left:8px; background:var(--arctic-900); color:#fff;
+  font-size:.56rem; font-weight:700; padding:3px 8px;
+}
+.hy-lineup-body{ padding:10px 12px 14px; }
+.hy-lineup-name{ font-size:.76rem; font-weight:700; color:var(--arctic-900); line-height:1.5; min-height:2.4em; }
+.hy-lineup-cool{ font-size:.62rem; color:var(--mint-600); font-weight:700; margin-top:8px; }
 
-  /* ============ Q&A ============ */
-  .qa-container{
-    background:#fff;
-    border:1px solid var(--line); border-radius:4px; padding:12px 32px;
-  }
-  .qa-item{border-bottom:1px solid var(--line); padding:28px 0;}
-  .qa-item:last-child{border-bottom:none;}
-  .qa-q{font-size:1rem; font-weight:700; color:var(--arctic-900); display:flex; gap:12px; margin-bottom:12px;}
-  .qa-q .mark{color:var(--sand-deep); font-family:'Zen Old Mincho',serif; font-size:1.2rem;}
-  .qa-a{font-size:.9rem; color:var(--ink-soft); display:flex; gap:12px; line-height:1.9;}
-  .qa-a .mark{color:var(--glacier-700); font-family:'Zen Old Mincho',serif; font-weight:700; font-size:1.2rem;}
-  .qa-products{margin-top:16px; padding-left:32px;}
+/* ---------- フッター / 注意事項 ---------- */
+.hy-footer-note{ background:var(--frost-50); padding:36px 20px 44px; text-align:center; font-size:.78rem; color:var(--ink-soft); }
+.hy-footer-note a{ color:var(--arctic-700); font-weight:700; }
 
-  /* ============ 組み合わせ提案 ============ */
-  .combo-box{
-    background:#fff;
-    border:1px solid var(--coral-600); border-radius:4px; padding:40px;
-    text-align:center;
-  }
-  .combo-box h3{color:var(--arctic-900); font-size:1.3rem; margin-bottom:14px; font-weight:700;}
-  .combo-box > p{color:var(--ink-soft); font-size:.9rem; max-width:620px; margin:0 auto 24px;}
-  .combo-visual{display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:24px; flex-wrap:wrap;}
-  .combo-plus{font-size:1.4rem; color:var(--sand-deep); font-weight:900;}
+/* ---------- スマホ追従CTA ---------- */
+.hy-sticky-cta{
+  position:sticky; bottom:0; z-index:50;
+  padding:10px; background:rgba(255,255,255,.96);
+  border-top:2px solid var(--glacier-500); box-shadow:0 -3px 10px rgba(0,0,0,.12);
+}
+.hy-sticky-cta a{ font-size:.84rem; padding:13px 6px; background:var(--arctic-900); color:#fff; border:2px solid var(--glacier-500); }
 
-  /* ============ レビュー ============ */
-  .review-note{
-    max-width:640px; margin:0 auto 32px; text-align:center;
-    background:var(--frost-100); border:1px dashed var(--glacier-500);
-    color:var(--arctic-800); font-size:.8rem; padding:14px 20px; border-radius:2px;
-  }
-  .review-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:18px;}
-  .review-card{
-    background:#fff; border:1px solid var(--line); border-radius:4px; padding:24px;
-  }
-  .review-stars{color:var(--sand-deep); font-size:1rem; letter-spacing:2px; margin-bottom:12px;}
-  .review-text{font-size:.86rem; color:var(--ink-soft); margin-bottom:16px; min-height:66px;}
-  .review-meta{display:flex; justify-content:space-between; align-items:center; font-size:.74rem; color:var(--ink-soft);}
-  .review-name{font-weight:700; color:var(--arctic-800);}
-  .review-product{font-size:.7rem; color:var(--glacier-700); font-weight:700; margin-top:10px;}
+/* ==========================================================================
+   PCレイアウト (768px以上)
+   ========================================================================== */
+@media screen and (min-width:768px){
+  .hy-hero-img-frame .hy-hero-img-sp{ display:none; }
+  .hy-hero-img-frame .hy-hero-img-pc{ display:block; }
 
-  /* ============ 全品ラインナップ ============ */
-  .lineup-tabs{
-    display:flex; gap:24px; justify-content:center; flex-wrap:wrap; margin-bottom:36px;
-    border-bottom:1px solid var(--line);
-  }
-  .lineup-tab{
-    font-size:.78rem; font-weight:700; padding:10px 2px; background:none;
-    border:none; border-bottom:2px solid transparent;
-    color:var(--ink-soft); letter-spacing:.04em; cursor:pointer; transition:.2s;
-  }
-  .lineup-tab.active, .lineup-tab:hover{color:var(--arctic-900); border-color:var(--arctic-700);}
-  .lineup-grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:20px;}
-  .lineup-card{
-    position:relative;
-    background:#fff; border:1px solid var(--line); border-radius:2px; overflow:hidden;
-    text-decoration:none; color:var(--ink); transition:.2s; display:block;
-  }
-  .lineup-card:hover{transform:translateY(-4px); box-shadow:var(--shadow-soft); border-color:var(--glacier-500);}
-  .lineup-card::after{
-    content:''; position:absolute; inset:0; pointer-events:none; z-index:1;
-    background:linear-gradient(115deg, transparent 40%, rgba(255,255,255,.6) 50%, transparent 60%);
-    transform:translateX(-140%); transition:transform .7s ease;
-  }
-  .lineup-card:hover::after{transform:translateX(140%);}
-  .lineup-thumb{
-    aspect-ratio:1/1; background:var(--frost-100);
-    display:flex; align-items:center; justify-content:center; position:relative;
-  }
-  .lineup-thumb img{width:100%; height:100%; object-fit:cover;}
-  .lineup-thumb svg{width:38px; height:38px; color:var(--arctic-700);}
-  .lineup-cat-badge{
-    position:absolute; top:10px; left:10px; background:var(--arctic-900); color:#fff;
-    font-size:.6rem; font-weight:700; padding:3px 10px; letter-spacing:.03em;
-  }
-  .lineup-body{padding:14px 16px 18px;}
-  .lineup-name{font-size:.82rem; font-weight:700; color:var(--arctic-900); line-height:1.5;
-    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:2.6em;}
-  .lineup-cool{font-size:.66rem; color:var(--mint-600); font-weight:700; margin-top:8px; letter-spacing:.02em;}
+  .hy-result-prod-grid{ grid-template-columns:repeat(2,1fr); }
+  .hy-lineup-grid{ grid-template-columns:repeat(3,1fr); }
 
-  footer{
-    text-align:center; padding:60px 24px 80px; color:var(--ink-soft); font-size:.8rem;
-    border-top:1px solid var(--line); margin-top:40px;
-  }
-  footer a{color:var(--arctic-700); font-weight:700; text-decoration:underline;}
-
-  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
-  .reveal.in{opacity:1; transform:translateY(0);}
-
-  @media (max-width:640px){
-    section{padding:56px 0;}
-    .expert-card{grid-template-columns:1fr; text-align:left;}
-    .expert-avatar{width:48px; height:48px;}
-    .qa-container{padding:8px 20px;}
-    .diagnostic{padding:36px 20px;}
-    .choice-btn{flex:1 1 100%;}
-  }
-  @media (prefers-reduced-motion: reduce){
-    *{animation-duration:.01ms !important; transition-duration:.01ms !important; scroll-behavior:auto !important;}
-  }
+  .hy-sticky-cta{ display:none; }
+}
 </style>
 </head>
 <body>
+<div class="hy-wrap">
 
-<div class="cool-gauge-wrap"><div class="cool-gauge" id="coolGauge"></div></div>
+  <!-- ============================================================
+       ヘッダー
+       ============================================================ -->
+  <header class="hy-header">枕と眠りのおやすみショップ！</header>
 
-<nav class="mini-nav">
-  <div class="mini-nav-bar">
-    <span class="nav-brand ui-font">❄ 涼感メニュー</span>
-    <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="メニューを開閉する">
-      <svg class="icon-burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-      <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
-    </button>
-  </div>
-  <div class="mini-nav-inner" id="navLinks">
-    <a href="#diagnosis">30秒診断</a>
-    <a href="#timeline">熱帯夜24時</a>
-    <a href="#qa">お悩みQ&amp;A</a>
-    <a href="#combo">最強の組み合わせ</a>
-    <a href="#voice">お客様の声</a>
-    <a href="#lineup">全品ラインナップ</a>
-  </div>
-</nav>
+  <!-- ============================================================
+       1. ファーストビュー
+       ▼FVメインビジュアル差し替え箇所: images/hero/hero-kanban-pc.svg / hero-kanban-sp.svg
+       ============================================================ -->
+  <section class="hy-hero">
+    <!-- スマホ幅(767px以下)は縦長、768px以上は横長バナーを表示 -->
+    <div class="hy-hero-img-frame">
+      <img src="images/hero/hero-kanban-sp.svg" alt="熱帯夜も、快適に、寝たいや！夏の快眠寝具特集" class="hy-hero-img-sp">
+      <img src="images/hero/hero-kanban-pc.svg" alt="熱帯夜も、快適に、寝たいや！夏の快眠寝具特集" class="hy-hero-img-pc">
+    </div>
+    <div class="hy-hero-content">
+      <p class="hy-hero-copy">「暑くて起きる」のも「冷えすぎてダルい」のも、もう終わりにしませんか。<br>睡眠改善インストラクター監修、あなたにぴったりのひんやり寝具が見つかります。</p>
 
-<main>
+      <!-- ▼CTAリンク先: 診断セクションへのスクロールリンク -->
+      <a href="#diagnosis" class="hy-cta hy-cta-primary">
+        30秒で私の「寝たいや」タイプを診断する
+        <span class="hy-cta-sub">睡眠改善インストラクター監修</span>
+      </a>
+      <a href="#lineup" class="hy-cta hy-cta-ghost">商品を先に見る</a>
+    </div>
+  </section>
 
-  <header class="hero">
-    <div class="crystal-field" id="crystalField" aria-hidden="true"></div>
-    <div class="hero-grid">
-      <div class="hero-photo">
-        <img src="assets_hero.jpg" alt="ひんやり寝具のある暮らし" loading="eager">
-      </div>
-      <div class="hero-content">
-        <div class="hero-ice-deco" aria-hidden="true"></div>
-        <span class="hero-eyebrow ui-font">夏の快眠適正テスト＆お悩み解決特集</span>
-        <h1 class="display">熱帯夜も、<span class="accent">快適に、</span><br class="sp-only">寝たいや！</h1>
-        <p class="hero-sub">「暑くて起きる」のも「冷えすぎてダルい」のも、もう終わりにしませんか。<br>
-        睡眠改善インストラクター監修のもと、あなたの寝室環境に合わせて<br class="sp-only">
-        朝まで深く眠れる、ひんやり寝具の選び方をまるごとご案内します。</p>
-        <div class="hero-cta">
-          <a href="#diagnosis" class="btn btn-primary btn-hero ui-font">30秒で<br>私の「寝たいや」<br>タイプを診断する</a>
-          <a href="#lineup" class="btn btn-ghost ui-font">商品を先に見る</a>
+  <!-- ============================================================
+       専門家ボックス
+       ============================================================ -->
+  <section class="hy-section hy-section-white">
+    <div class="hy-inner">
+      <div class="hy-expert-card">
+        <div class="hy-expert-avatar">監修</div>
+        <div>
+          <div class="hy-expert-title">睡眠改善インストラクター</div>
+          <div class="hy-expert-name">益田桃花 さん</div>
+          <p class="hy-expert-comment">日本の熱帯夜は高い「湿度」が特徴です。エアコンをつけっぱなしにする方、タイマーで切る方、風が苦手な方——寝室の使い方によって選ぶべき寝具の素材はまったく違います。ご自身の睡眠スタイルに合わせて正しく引き算・足し算することが、翌朝のパフォーマンスを守る一番の近道です。</p>
         </div>
       </div>
     </div>
-  </header>
+  </section>
 
-  <div class="container">
+  <!-- ============================================================
+       診断クイズ
+       ============================================================ -->
+  <section id="diagnosis" class="hy-section hy-section-frost">
+    <div class="hy-inner">
+      <span class="hy-section-eyebrow">DIAGNOSIS</span>
+      <h2 class="hy-section-title">まずは30秒で判別。<br>あなたの「寝たいや」タイプ診断</h2>
+      <p class="hy-section-lead">2つの質問に答えるだけで、今夜からの寝具選びがはっきりします。</p>
 
-    <section id="expert" class="reveal">
-      <div class="expert-card">
-        <div class="expert-avatar ui-font">監修</div>
-        <div>
-          <div class="expert-title ui-font">睡眠改善インストラクター</div>
-          <div class="expert-name">益田桃花 さん</div>
-          <p class="expert-comment">日本の熱帯夜は高い「湿度」が特徴です。エアコンをつけっぱなしにする方、タイマーで切る方、風が苦手な方——寝室の使い方によって選ぶべき寝具の素材はまったく違います。ご自身の睡眠スタイルに合わせて正しく引き算・足し算することが、翌朝のパフォーマンスを守る一番の近道です。</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="diagnosis" class="reveal">
-      <span class="section-eyebrow ui-font">DIAGNOSIS</span>
-      <h2 class="section-title display">まずは30秒で判別。あなたの「寝たいや」タイプ診断</h2>
-      <p class="section-lead">2つの質問に答えるだけで、今夜からの寝具選びがはっきりします。</p>
-
-      <div class="diagnostic">
-        <div class="diag-progress" aria-hidden="true">
-          <span class="diag-dot active" id="dot1"></span>
-          <span class="diag-dot" id="dot2"></span>
-          <span class="diag-dot" id="dot3"></span>
+      <div class="hy-diagnostic">
+        <div class="hy-diag-progress" aria-hidden="true">
+          <span class="hy-diag-dot active" id="dot1"></span>
+          <span class="hy-diag-dot" id="dot2"></span>
+          <span class="hy-diag-dot" id="dot3"></span>
         </div>
 
-        <div id="q1" class="quiz-card active">
-          <p class="quiz-text">Q1. 夏の夜、エアコン（冷房）はどのように使っていますか？</p>
-          <div class="btn-group">
-            <button class="choice-btn ui-font" onclick="nextQuestion('A')">朝までずーっと<br>「つけっぱなし」派</button>
-            <button class="choice-btn ui-font" onclick="nextQuestion('B')">タイマーで「途中で切る」派<br>／ 苦手だから使わない派</button>
+        <div id="q1" class="hy-quiz-card active">
+          <p class="hy-quiz-text">Q1. 夏の夜、エアコン(冷房)はどのように使っていますか？</p>
+          <div class="hy-btn-group">
+            <button class="hy-choice-btn" onclick="nextQuestion('A')">朝までずーっと「つけっぱなし」派</button>
+            <button class="hy-choice-btn" onclick="nextQuestion('B')">タイマーで「途中で切る」派 ／ 苦手だから使わない派</button>
           </div>
         </div>
 
-        <div id="q2-A" class="quiz-card">
-          <p class="quiz-text">Q2. エアコンをつけた部屋での、あなたの体質は？</p>
-          <div class="btn-group">
-            <button class="choice-btn ui-font" onclick="showFinalResult('pattern1')">エアコンをつけていても、<br>背中がムレたり汗をかく</button>
-            <button class="choice-btn ui-font" onclick="showFinalResult('pattern2')">夜中や明け方に、<br>肌寒さで目が覚めることがある</button>
+        <div id="q2-A" class="hy-quiz-card">
+          <p class="hy-quiz-text">Q2. エアコンをつけた部屋での、あなたの体質は？</p>
+          <div class="hy-btn-group">
+            <button class="hy-choice-btn" onclick="showFinalResult('pattern1')">エアコンをつけていても、背中がムレたり汗をかく</button>
+            <button class="hy-choice-btn" onclick="showFinalResult('pattern2')">夜中や明け方に、肌寒さで目が覚めることがある</button>
           </div>
         </div>
 
-        <div id="q2-B" class="quiz-card">
-          <p class="quiz-text">Q2. エアコンが切れた（または使わない）時のあなたの状態は？</p>
-          <div class="btn-group">
-            <button class="choice-btn ui-font" onclick="showFinalResult('pattern3')">とにかく暑がり！<br>大量の汗で目が覚める</button>
-            <button class="choice-btn ui-font" onclick="showFinalResult('pattern4')">暑いけれど、<br>汗冷えやお腹の冷えも心配</button>
+        <div id="q2-B" class="hy-quiz-card">
+          <p class="hy-quiz-text">Q2. エアコンが切れた(または使わない)時のあなたの状態は？</p>
+          <div class="hy-btn-group">
+            <button class="hy-choice-btn" onclick="showFinalResult('pattern3')">とにかく暑がり！大量の汗で目が覚める</button>
+            <button class="hy-choice-btn" onclick="showFinalResult('pattern4')">暑いけれど、汗冷えやお腹の冷えも心配</button>
           </div>
         </div>
 
-        <div id="res-pattern1" class="result-area">
-          <div class="result-card">
-            <div class="result-header">
-              <span class="result-badge ui-font">RESULT</span>
-              <h3 class="result-title">氷河期室温<br>× 極冷キープ タイプ</h3>
+        <div id="res-pattern1" class="hy-result-area">
+          <div class="hy-result-card">
+            <div class="hy-result-header">
+              <span class="hy-result-badge">RESULT</span>
+              <h3 class="hy-result-title">氷河期室温<br>× 極冷キープ タイプ</h3>
             </div>
-            <div class="result-body">エアコンの冷気と相乗効果を生み、27℃の快適室温をキープするハイテク冷感シリーズがベスト。寝返りのたびに背中の熱をどんどん逃がします。</div>
-            <div class="prod-grid result-prod-grid" data-products="12,13"></div>
-            <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
+            <div class="hy-result-body">エアコンの冷気と相乗効果を生み、27℃の快適室温をキープするハイテク冷感シリーズがベスト。寝返りのたびに背中の熱をどんどん逃がします。</div>
+            <div class="hy-prod-grid hy-result-prod-grid" data-products="12,13"></div>
+            <button class="hy-btn-reset" onclick="resetQuiz()">↺ もう一度診断する</button>
           </div>
         </div>
 
-        <div id="res-pattern2" class="result-area">
-          <div class="result-card">
-            <div class="result-header">
-              <span class="result-badge ui-font">RESULT</span>
-              <h3 class="result-title">エアコン調和<br>× おなか守り タイプ</h3>
+        <div id="res-pattern2" class="hy-result-area">
+          <div class="hy-result-card">
+            <div class="hy-result-header">
+              <span class="hy-result-badge">RESULT</span>
+              <h3 class="hy-result-title">エアコン調和<br>× おなか守り タイプ</h3>
             </div>
-            <div class="result-body">冷気を優しく遮断しつつ、体に寄り添うガーゼケットや夏用羽毛布団でお腹まわりを守りましょう。冷えと涼しさ、両方の欲張りを叶えます。</div>
-            <div class="prod-grid result-prod-grid" data-products="9,11"></div>
-            <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
+            <div class="hy-result-body">冷気を優しく遮断しつつ、体に寄り添うガーゼケットや夏用羽毛布団でお腹まわりを守りましょう。冷えと涼しさ、両方の欲張りを叶えます。</div>
+            <div class="hy-prod-grid hy-result-prod-grid" data-products="9,11"></div>
+            <button class="hy-btn-reset" onclick="resetQuiz()">↺ もう一度診断する</button>
           </div>
         </div>
 
-        <div id="res-pattern3" class="result-area">
-          <div class="result-card">
-            <div class="result-header">
-              <span class="result-badge ui-font">RESULT</span>
-              <h3 class="result-title">熱帯雨林<br>× 瞬間冷却＆水冷 タイプ</h3>
+        <div id="res-pattern3" class="hy-result-area">
+          <div class="hy-result-card">
+            <div class="hy-result-header">
+              <span class="hy-result-badge">RESULT</span>
+              <h3 class="hy-result-title">熱帯雨林<br>× 瞬間冷却&水冷 タイプ</h3>
             </div>
-            <div class="result-body">エアコンが切れた後の室温上昇には、物理的に頭部や体を冷やす水まくらやアイスモグが救世主に。汗の量に負けない即効クールダウンを。</div>
-            <div class="prod-grid result-prod-grid" data-products="3,4"></div>
-            <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
+            <div class="hy-result-body">エアコンが切れた後の室温上昇には、物理的に頭部や体を冷やす水まくらやアイスモグが救世主に。汗の量に負けない即効クールダウンを。</div>
+            <div class="hy-prod-grid hy-result-prod-grid" data-products="3,4"></div>
+            <button class="hy-btn-reset" onclick="resetQuiz()">↺ もう一度診断する</button>
           </div>
         </div>
 
-        <div id="res-pattern4" class="result-area">
-          <div class="result-card">
-            <div class="result-header">
-              <span class="result-badge ui-font">RESULT</span>
-              <h3 class="result-title">温度乱高下<br>× 天然の調湿 タイプ</h3>
+        <div id="res-pattern4" class="hy-result-area">
+          <div class="hy-result-card">
+            <div class="hy-result-header">
+              <span class="hy-result-badge">RESULT</span>
+              <h3 class="hy-result-title">温度乱高下<br>× 天然の調湿 タイプ</h3>
             </div>
-            <div class="result-body">外気の変化に合わせて湿度を自動コントロールする「麻」や、抱きしめて涼しいクール抱き枕が最適。汗冷えの不安をやわらげます。</div>
-            <div class="prod-grid result-prod-grid" data-products="8,5"></div>
-            <button class="btn-reset ui-font" onclick="resetQuiz()">↺ もう一度診断する</button>
+            <div class="hy-result-body">外気の変化に合わせて湿度を自動コントロールする「麻」や、抱きしめて涼しいクール抱き枕が最適。汗冷えの不安をやわらげます。</div>
+            <div class="hy-prod-grid hy-result-prod-grid" data-products="8,5"></div>
+            <button class="hy-btn-reset" onclick="resetQuiz()">↺ もう一度診断する</button>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="timeline" class="reveal">
-      <span class="section-eyebrow ui-font">24H TIMELINE</span>
-      <h2 class="section-title display">熱帯夜24時「私はこうして、寝たいや」</h2>
-      <p class="section-lead">時間帯によって、寝苦しさの正体は変わります。原因を知れば、対策はもっとシンプルに。</p>
+  <!-- ============================================================
+       24時間タイムライン
+       ============================================================ -->
+  <section id="timeline" class="hy-section hy-section-white">
+    <div class="hy-inner">
+      <span class="hy-section-eyebrow">24H TIMELINE</span>
+      <h2 class="hy-section-title">熱帯夜24時<br>「私はこうして、寝たいや」</h2>
+      <p class="hy-section-lead">時間帯によって、寝苦しさの正体は変わります。原因を知れば、対策はもっとシンプルに。</p>
 
-      <div class="timeline">
-        <article class="timeline-item">
-          <span class="timeline-time ui-font">22:00　入床時：体にこもる「初期熱」</span>
-          <div class="timeline-scene">布団に入った瞬間、背中や頭がモワッと熱い！</div>
-          <div class="timeline-mechanism">🔬 お風呂上がりで上昇した皮膚温度が布団に移動し、素材に熱がこもって発散されないのが原因です。</div>
-          <p class="timeline-text">スムーズな入眠には、脳と体の中心温度（深部体温）を下げることが必要。頭をひんやり落ち着かせる枕や、触れた瞬間に熱を吸い上げる抱き枕で初期熱をリセットしましょう。</p>
-          <div class="prod-grid" data-products="1,6"></div>
+      <div class="hy-timeline">
+        <article class="hy-timeline-item">
+          <span class="hy-timeline-time">22:00　入床時：体にこもる「初期熱」</span>
+          <div class="hy-timeline-scene">布団に入った瞬間、背中や頭がモワッと熱い！</div>
+          <div class="hy-timeline-mechanism">🔬 お風呂上がりで上昇した皮膚温度が布団に移動し、素材に熱がこもって発散されないのが原因です。</div>
+          <p class="hy-timeline-text">スムーズな入眠には、脳と体の中心温度(深部体温)を下げることが必要。頭をひんやり落ち着かせる枕や、触れた瞬間に熱を吸い上げる抱き枕で初期熱をリセットしましょう。</p>
+          <div class="hy-prod-grid" data-products="1,6"></div>
         </article>
 
-        <article class="timeline-item">
-          <span class="timeline-time ui-font">01:00　深夜：タイマー切れによる「湿度スパイク」</span>
-          <div class="timeline-scene">エアコンが切れた途端、猛烈なムシムシ感で目が覚める！</div>
-          <div class="timeline-mechanism">🔬 冷房停止による室温上昇と、睡眠中にコップ1杯分流れる寝汗が布団内に閉じ込められ、湿度が急上昇するのが原因です。</div>
-          <p class="timeline-text">この時間の不快感の正体は温度だけでなく「極端な高湿度」。寝返りのたびに熱を逃がすシーツや、物理的に冷たさを維持できる水まくらが深い眠りを守る盾になります。</p>
-          <div class="prod-grid" data-products="3,13"></div>
+        <article class="hy-timeline-item">
+          <span class="hy-timeline-time">01:00　深夜：タイマー切れによる「湿度スパイク」</span>
+          <div class="hy-timeline-scene">エアコンが切れた途端、猛烈なムシムシ感で目が覚める！</div>
+          <div class="hy-timeline-mechanism">🔬 冷房停止による室温上昇と、睡眠中にコップ1杯分流れる寝汗が布団内に閉じ込められ、湿度が急上昇するのが原因です。</div>
+          <p class="hy-timeline-text">この時間の不快感の正体は温度だけでなく「極端な高湿度」。寝返りのたびに熱を逃がすシーツや、物理的に冷たさを維持できる水まくらが深い眠りを守る盾になります。</p>
+          <div class="hy-prod-grid" data-products="3,13"></div>
         </article>
 
-        <article class="timeline-item">
-          <span class="timeline-time ui-font">04:00　明け方：外気温低下による「冷えと寝汗のジレンマ」</span>
-          <div class="timeline-scene">エアコンのつけっぱなし、または朝方の冷え込みで肌寒いのに汗ばむ…</div>
-          <div class="timeline-mechanism">🔬 一日で最も外気温が下がる時間帯。冷気が体を冷やす一方、レム睡眠時にかく寝汗が逃げ場を失うのが原因です。</div>
-          <p class="timeline-text">朝方は、寝冷え対策と吸汗速乾の両立が求められるデリケートな時間。冷気を適度に遮りつつ、寝汗の水分だけを驚異的な通気性で外へ逃がす五重ガーゼが体を優しく守ります。</p>
-          <div class="prod-grid" data-products="9,10"></div>
+        <article class="hy-timeline-item">
+          <span class="hy-timeline-time">04:00　明け方：外気温低下による「冷えと寝汗のジレンマ」</span>
+          <div class="hy-timeline-scene">エアコンのつけっぱなし、または朝方の冷え込みで肌寒いのに汗ばむ…</div>
+          <div class="hy-timeline-mechanism">🔬 一日で最も外気温が下がる時間帯。冷気が体を冷やす一方、レム睡眠時にかく寝汗が逃げ場を失うのが原因です。</div>
+          <p class="hy-timeline-text">朝方は、寝冷え対策と吸汗速乾の両立が求められるデリケートな時間。冷気を適度に遮りつつ、寝汗の水分だけを驚異的な通気性で外へ逃がす五重ガーゼが体を優しく守ります。</p>
+          <div class="hy-prod-grid" data-products="9,10"></div>
         </article>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="qa" class="reveal">
-      <span class="section-eyebrow ui-font">Q&amp;A</span>
-      <h2 class="section-title display">みんなの「寝たいや」を叶える、夏の寝具駆け込み寺</h2>
-      <p class="section-lead">よくいただくご質問に、プロの視点でお答えします。</p>
+  <!-- ============================================================
+       Q&A
+       ============================================================ -->
+  <section id="qa" class="hy-section hy-section-frost">
+    <div class="hy-inner">
+      <span class="hy-section-eyebrow">Q&amp;A</span>
+      <h2 class="hy-section-title">みんなの「寝たいや」を叶える、<br>夏の寝具駆け込み寺</h2>
+      <p class="hy-section-lead">よくいただくご質問に、プロの視点でお答えします。</p>
 
-      <div class="qa-container">
-        <div class="qa-item">
-          <div class="qa-q"><span class="mark">Q.</span>冷感寝具って、最初は冷たいけど夜中に生温くなりませんか？</div>
-          <div class="qa-a"><span class="mark">A.</span>おっしゃる通り、一般的な冷感寝具は体熱が移ると温まります。だからこそ重要なのが、熱を吸放出するスピード。エアコンを弱めにつけっぱなしにする環境なら、室温を一定に保つハイテク繊維「The ICE 27」シリーズが夜中の生温さを防ぐ最適解になります。</div>
-          <div class="prod-grid qa-products" data-products="14"></div>
+      <div class="hy-qa-container">
+        <div class="hy-qa-item">
+          <div class="hy-qa-q"><span class="hy-qa-mark-q">Q.</span>冷感寝具って、最初は冷たいけど夜中に生温くなりませんか？</div>
+          <div class="hy-qa-a"><span class="hy-qa-mark-a">A.</span>おっしゃる通り、一般的な冷感寝具は体熱が移ると温まります。だからこそ重要なのが、熱を吸放出するスピード。エアコンを弱めにつけっぱなしにする環境なら、室温を一定に保つハイテク繊維「The ICE 27」シリーズが夜中の生温さを防ぐ最適解になります。</div>
+          <div class="hy-prod-grid hy-qa-products" data-products="14"></div>
         </div>
 
-        <div class="qa-item">
-          <div class="qa-q"><span class="mark">Q.</span>エアコンの冷風が苦手。でも何も掛けないと暑いし、どうすれば？</div>
-          <div class="qa-a"><span class="mark">A.</span>冷風が苦手な方は、寝具に「吸湿性と通気性」を求めてください。日本の夏の寝苦しさは温度だけでなく「湿度」が原因。天然の麻を使った敷きパッドや、風を通すガーゼケットならエアコンに頼りすぎなくても布団の中をサラサラに保てます。</div>
-          <div class="prod-grid qa-products" data-products="8,9"></div>
+        <div class="hy-qa-item">
+          <div class="hy-qa-q"><span class="hy-qa-mark-q">Q.</span>エアコンの冷風が苦手。でも何も掛けないと暑いし、どうすれば？</div>
+          <div class="hy-qa-a"><span class="hy-qa-mark-a">A.</span>冷風が苦手な方は、寝具に「吸湿性と通気性」を求めてください。日本の夏の寝苦しさは温度だけでなく「湿度」が原因。天然の麻を使った敷きパッドや、風を通すガーゼケットならエアコンに頼りすぎなくても布団の中をサラサラに保てます。</div>
+          <div class="hy-prod-grid hy-qa-products" data-products="8,9"></div>
         </div>
 
-        <div class="qa-item">
-          <div class="qa-q"><span class="mark">Q.</span>子どもと一緒に寝ていますが、大人と子どもで体感温度が違いすぎて困っています。</div>
-          <div class="qa-a"><span class="mark">A.</span>エアコンの温度は暑がりなお子様（またはパパ）に合わせつつ、寒がりなママは「そよ風ケット」や「夏用羽毛布団」でパーソナルに防波堤を作るのがおすすめ。手軽に涼をとれる「ハンディアイスモグ」をベッドに忍ばせておくのも、家族みんなが快適に眠る小ワザです。</div>
-          <div class="prod-grid qa-products" data-products="15"></div>
+        <div class="hy-qa-item">
+          <div class="hy-qa-q"><span class="hy-qa-mark-q">Q.</span>子どもと一緒に寝ていますが、大人と子どもで体感温度が違いすぎて困っています。</div>
+          <div class="hy-qa-a"><span class="hy-qa-mark-a">A.</span>エアコンの温度は暑がりなお子様(またはパパ)に合わせつつ、寒がりなママは「そよ風ケット」や「夏用羽毛布団」でパーソナルに防波堤を作るのがおすすめ。手軽に涼をとれる「ハンディアイスモグ」をベッドに忍ばせておくのも、家族みんなが快適に眠る小ワザです。</div>
+          <div class="hy-prod-grid hy-qa-products" data-products="15"></div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="combo" class="reveal">
-      <span class="section-eyebrow ui-font">BEST COMBO</span>
-      <h2 class="section-title display">敷きパッド（下）× 掛け布団（上）のサンドイッチが最強</h2>
-      <div class="combo-box">
-        <div class="combo-visual" id="comboVisual"></div>
+  <!-- ============================================================
+       組み合わせ提案
+       ============================================================ -->
+  <section id="combo" class="hy-section hy-section-white">
+    <div class="hy-inner">
+      <span class="hy-section-eyebrow">BEST COMBO</span>
+      <h2 class="hy-section-title">敷きパッド(下)× 掛け布団(上)の<br>サンドイッチが最強</h2>
+      <div class="hy-combo-box">
+        <div class="hy-combo-visual" id="comboVisual"></div>
         <p>診断結果をベースにしつつ、時間帯ごとの悩みに合わせて「上と下」を賢く組み合わせるのがプロの最適解です。下からは背中の熱を逃がし、上からはエアコンの直風を防ぐ。これぞ最強の「寝たいや」スタイルです。</p>
-        <a href="#lineup" class="btn btn-primary ui-font">自分に合う組み合わせを探す</a>
+        <a href="#lineup" class="hy-cta hy-cta-primary" style="display:inline-block;">自分に合う組み合わせを探す</a>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <section id="voice" class="reveal">
-      <span class="section-eyebrow ui-font">CUSTOMER'S VOICE</span>
-      <h2 class="section-title display">お客様の声</h2>
-      <p class="section-lead">実際にお使いいただいた方の感想をお届けします。</p>
+  <!-- ============================================================
+       お客様の声(現在プレースホルダー)
+       ============================================================ -->
+  <section id="voice" class="hy-section hy-section-frost">
+    <div class="hy-inner">
+      <span class="hy-section-eyebrow">CUSTOMER'S VOICE</span>
+      <h2 class="hy-section-title">お客様の声</h2>
+      <p class="hy-section-lead">実際にお使いいただいた方の感想をお届けします。</p>
 
       <!--
         【運用メモ：レビューデータの反映方法】
-        実際のレビュー（評価・コメント）データをいただき次第、
+        実際のレビュー(評価・コメント)データをいただき次第、
         下記 window.REVIEWS の配列を実データに差し替えてください。
-        現在はレイアウト確認用のサンプル文言です（実在のお客様の声ではありません）。
+        現在はレイアウト確認用のサンプル文言です(実在のお客様の声ではありません)。
       -->
-      <p class="review-note ui-font">※ このセクションは表示レイアウトのサンプルです。実際のレビューデータをいただき次第、内容を反映します。</p>
-      <div class="review-grid" id="reviewGrid"></div>
-    </section>
+      <p class="hy-review-note">※ このセクションは表示レイアウトのサンプルです。実際のレビューデータをいただき次第、内容を反映します。</p>
+      <div class="hy-review-grid" id="reviewGrid"></div>
+    </div>
+  </section>
 
-    <section id="lineup" class="reveal">
-      <span class="section-eyebrow ui-font">ALL ITEMS</span>
-      <h2 class="section-title display">夏のひんやり寝具、全品ラインナップ</h2>
-      <p class="section-lead">気になるカテゴリーから、じっくり選んでみてください。</p>
+  <!-- ============================================================
+       全品ラインナップ
+       ============================================================ -->
+  <section id="lineup" class="hy-section hy-section-white">
+    <div class="hy-inner">
+      <span class="hy-section-eyebrow">ALL ITEMS</span>
+      <h2 class="hy-section-title">夏のひんやり寝具、<br>全品ラインナップ</h2>
+      <p class="hy-section-lead">気になるカテゴリーから、じっくり選んでみてください。</p>
 
-      <div class="lineup-tabs" id="lineupTabs"></div>
-      <div class="lineup-grid" id="lineupGrid"></div>
-    </section>
+      <div class="hy-lineup-tabs" id="lineupTabs"></div>
+      <div class="hy-lineup-grid" id="lineupGrid"></div>
+    </div>
+  </section>
 
-  </div>
-
-  <footer>
-    <p class="ui-font">枕と眠りのおやすみショップ！楽天市場店</p>
+  <!-- ============================================================
+       フッター
+       ============================================================ -->
+  <section class="hy-footer-note">
+    <p>枕と眠りのおやすみショップ！楽天市場店</p>
     <p style="margin-top:6px;">今夜も、涼しく、気持ちよく、寝たいや。</p>
     <p style="margin-top:14px;"><a href="https://www.rakuten.co.jp/oyasumi/" target="_blank" rel="noopener">ショップトップページへ →</a></p>
-  </footer>
+  </section>
 
-</main>
+  <!-- スマホ追従CTA -->
+  <div class="hy-sticky-cta">
+    <a href="#diagnosis" class="hy-cta">30秒で診断する</a>
+  </div>
+
+</div>
 
 <script>
 /* ===================== 商品マスターデータ ===================== */
 /* image: 確認済みの実商品画像がある場合のみURLを設定。
-   未設定の場合はカテゴリー別のアイスキューブ・アイコンを自動表示します。
+   未設定の場合はカテゴリー別のアイコンを自動表示します。
    実画像が用意でき次第、この image の値を差し替えるだけで反映されます。 */
 const PRODUCTS = {
   1:  {name:"王様の夢枕2", cat:"枕", cool:true,  url:"https://item.rakuten.co.jp/oyasumi/s-500410/", image:"https://shop.r10s.jp/oyasumi/cabinet/m104/104-700500-10no1.jpg"},
@@ -786,13 +613,13 @@ const PRODUCTS = {
   9:  {name:"Fabric Plus ガーゼケット", cat:"ガーゼケット", cool:false, url:"https://item.rakuten.co.jp/oyasumi/570603/"},
   10: {name:"そよ風ケット", cat:"ガーゼケット", cool:false, url:"https://item.rakuten.co.jp/oyasumi/196-000760-12/"},
   11: {name:"夏に使う羽毛布団", cat:"夏用羽毛布団", cool:false, url:"https://item.rakuten.co.jp/oyasumi/251-000250-20/"},
-  12: {name:"The ICE 27（ザ・アイス 27） クールコントロール 肌掛け布団", cat:"肌掛け布団", cool:false, url:"https://item.rakuten.co.jp/oyasumi/196-000300-10/"},
-  13: {name:"The ICE 27（ザ・アイス 27） クールコントロール 敷きパッド", cat:"敷きパッド", cool:false, url:"https://item.rakuten.co.jp/oyasumi/196-000304-10/"},
-  14: {name:"The ICE 27（ザ・アイス 27） クールコントロール 枕カバー", cat:"枕カバー", cool:false, url:"https://item.rakuten.co.jp/oyasumi/196-000308-10/"},
+  12: {name:"The ICE 27(ザ・アイス 27) クールコントロール 肌掛け布団", cat:"肌掛け布団", cool:false, url:"https://item.rakuten.co.jp/oyasumi/196-000300-10/"},
+  13: {name:"The ICE 27(ザ・アイス 27) クールコントロール 敷きパッド", cat:"敷きパッド", cool:false, url:"https://item.rakuten.co.jp/oyasumi/196-000304-10/"},
+  14: {name:"The ICE 27(ザ・アイス 27) クールコントロール 枕カバー", cat:"枕カバー", cool:false, url:"https://item.rakuten.co.jp/oyasumi/196-000308-10/"},
   15: {name:"MOGU ハンディアイスモグ 2個入", cat:"雑貨", cool:false, url:"https://item.rakuten.co.jp/oyasumi/151-000301-20/"},
 };
 
-/* カテゴリー別アイコン（線画・氷キューブ風） */
+/* カテゴリー別アイコン(線画・氷キューブ風) */
 const CAT_ICONS = {
   "枕": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 18c0-4 4-7 18-7s18 3 18 7v12c0 4-4 7-18 7S6 34 6 30V18Z"/><path d="M17 15c-1 5-1 13 0 18M31 15c1 5 1 13 0 18"/></svg>',
   "抱き枕": '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="10" y="8" width="28" height="32" rx="14"/><path d="M18 18c2 3 2 9 0 12M30 18c-2 3-2 9 0 12"/></svg>',
@@ -813,12 +640,12 @@ function renderProdCard(id){
     ? `<img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.outerHTML=catIcon('${p.cat}');">`
     : catIcon(p.cat);
   return `
-  <a class="prod-card" href="${p.url}" target="_blank" rel="noopener">
-    <div class="prod-thumb">${p.cool ? '<span class="prod-cool-badge ui-font">接触冷感</span>' : ''}${thumb}</div>
-    <div class="prod-body">
-      <div class="prod-cat ui-font">${p.cat}</div>
-      <div class="prod-name">${p.name}</div>
-      <div class="prod-link-row ui-font">商品ページへ →</div>
+  <a class="hy-prod-card" href="${p.url}" target="_blank" rel="noopener">
+    <div class="hy-prod-thumb">${p.cool ? '<span class="hy-prod-cool-badge">接触冷感</span>' : ''}${thumb}</div>
+    <div class="hy-prod-body">
+      <div class="hy-prod-cat">${p.cat}</div>
+      <div class="hy-prod-name">${p.name}</div>
+      <div class="hy-prod-link-row">商品ページへ →</div>
     </div>
   </a>`;
 }
@@ -830,12 +657,12 @@ function renderResultProdCard(id){
     ? `<img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.outerHTML=catIcon('${p.cat}');">`
     : catIcon(p.cat);
   return `
-  <a class="result-prod-card" href="${p.url}" target="_blank" rel="noopener">
-    <div class="result-prod-photo">${p.cool ? '<span class="result-prod-cool-badge ui-font">接触冷感</span>' : ''}${photo}</div>
-    <div class="result-prod-body">
-      <div class="prod-cat ui-font">${p.cat}</div>
-      <div class="result-prod-name">${p.name}</div>
-      <div class="prod-link-row ui-font">商品ページへ →</div>
+  <a class="hy-result-prod-card" href="${p.url}" target="_blank" rel="noopener">
+    <div class="hy-result-prod-photo">${p.cool ? '<span class="hy-result-prod-cool-badge">接触冷感</span>' : ''}${photo}</div>
+    <div class="hy-result-prod-body">
+      <div class="hy-prod-cat">${p.cat}</div>
+      <div class="hy-result-prod-name">${p.name}</div>
+      <div class="hy-prod-link-row">商品ページへ →</div>
     </div>
   </a>`;
 }
@@ -846,28 +673,25 @@ function renderLineupCard(id){
     ? `<img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.outerHTML=catIcon('${p.cat}');">`
     : catIcon(p.cat);
   return `
-  <a class="lineup-card" href="${p.url}" target="_blank" rel="noopener" data-cat="${p.cat}">
-    <div class="lineup-thumb"><span class="lineup-cat-badge ui-font">${p.cat}</span>${thumb}</div>
-    <div class="lineup-body">
-      <div class="lineup-name">${p.name}</div>
-      ${p.cool ? '<div class="lineup-cool ui-font">❄ 接触冷感素材</div>' : ''}
+  <a class="hy-lineup-card" href="${p.url}" target="_blank" rel="noopener" data-cat="${p.cat}">
+    <div class="hy-lineup-thumb"><span class="hy-lineup-cat-badge">${p.cat}</span>${thumb}</div>
+    <div class="hy-lineup-body">
+      <div class="hy-lineup-name">${p.name}</div>
+      ${p.cool ? '<div class="hy-lineup-cool">❄ 接触冷感素材</div>' : ''}
     </div>
   </a>`;
 }
 
 try{
-  /* 商品カード類を一括描画（診断結果エリアは写真を大きく見せるカードを使用） */
-  document.querySelectorAll('.prod-grid[data-products]').forEach(grid=>{
+  document.querySelectorAll('.hy-prod-grid[data-products]').forEach(grid=>{
     const ids = grid.dataset.products.split(',').map(s=>s.trim());
-    const renderer = grid.classList.contains('result-prod-grid') ? renderResultProdCard : renderProdCard;
+    const renderer = grid.classList.contains('hy-result-prod-grid') ? renderResultProdCard : renderProdCard;
     grid.innerHTML = ids.map(renderer).join('');
   });
 
-  /* 組み合わせビジュアル（敷きパッド × 掛け布団） */
   document.getElementById('comboVisual').innerHTML =
-    renderProdCard(13) + '<span class="combo-plus">×</span>' + renderProdCard(12);
+    renderProdCard(13) + '<span class="hy-combo-plus">×</span>' + renderProdCard(12);
 
-  /* 全品ラインナップ */
   const allIds = Object.keys(PRODUCTS);
   const cats = ["すべて", ...Array.from(new Set(allIds.map(id=>PRODUCTS[id].cat)))];
   const lineupTabs = document.getElementById('lineupTabs');
@@ -877,11 +701,11 @@ try{
     const ids = filter === "すべて" ? allIds : allIds.filter(id=>PRODUCTS[id].cat===filter);
     lineupGrid.innerHTML = ids.map(renderLineupCard).join('');
   }
-  lineupTabs.innerHTML = cats.map((c,i)=>`<button class="lineup-tab${i===0?' active':''}" data-cat="${c}">${c}</button>`).join('');
+  lineupTabs.innerHTML = cats.map((c,i)=>`<button class="hy-lineup-tab${i===0?' active':''}" data-cat="${c}">${c}</button>`).join('');
   lineupTabs.addEventListener('click', e=>{
-    const btn = e.target.closest('.lineup-tab');
+    const btn = e.target.closest('.hy-lineup-tab');
     if(!btn) return;
-    lineupTabs.querySelectorAll('.lineup-tab').forEach(b=>b.classList.remove('active'));
+    lineupTabs.querySelectorAll('.hy-lineup-tab').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     renderLineup(btn.dataset.cat);
   });
@@ -890,21 +714,19 @@ try{
   console.error('商品描画でエラーが発生しました:', err);
 }
 
-
-/* ===================== レビュー（サンプル表示） ===================== */
-/* 実データ受領後は、この配列を差し替えるだけでOKです。 */
+/* ===================== レビュー(サンプル表示) ===================== */
 window.REVIEWS = [
-  {stars:5, text:"ここに実際のお客様レビューのコメントが入ります。", name:"（お客様データ待ち）", product:"—"},
-  {stars:5, text:"ここに実際のお客様レビューのコメントが入ります。", name:"（お客様データ待ち）", product:"—"},
-  {stars:4, text:"ここに実際のお客様レビューのコメントが入ります。", name:"（お客様データ待ち）", product:"—"},
+  {stars:5, text:"ここに実際のお客様レビューのコメントが入ります。", name:"(お客様データ待ち)", product:"—"},
+  {stars:5, text:"ここに実際のお客様レビューのコメントが入ります。", name:"(お客様データ待ち)", product:"—"},
+  {stars:4, text:"ここに実際のお客様レビューのコメントが入ります。", name:"(お客様データ待ち)", product:"—"},
 ];
 try{
   document.getElementById('reviewGrid').innerHTML = window.REVIEWS.map(r=>`
-    <div class="review-card">
-      <div class="review-stars" aria-label="評価${r.stars}">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
-      <div class="review-text">${r.text}</div>
-      <div class="review-meta"><span class="review-name">${r.name}</span></div>
-      <div class="review-product">${r.product}</div>
+    <div class="hy-review-card">
+      <div class="hy-review-stars" aria-label="評価${r.stars}">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</div>
+      <div class="hy-review-text">${r.text}</div>
+      <div class="hy-review-meta"><span class="hy-review-name">${r.name}</span></div>
+      <div class="hy-review-product">${r.product}</div>
     </div>
   `).join('');
 }catch(err){
@@ -918,198 +740,26 @@ function setDots(step){
   document.getElementById('dot3').classList.toggle('active', step>=3);
 }
 function nextQuestion(answer){
-  document.getElementById('q1').style.display = 'none';
-  document.getElementById(answer === 'A' ? 'q2-A' : 'q2-B').style.display = 'block';
+  document.getElementById('q1').classList.remove('active');
+  document.getElementById(answer === 'A' ? 'q2-A' : 'q2-B').classList.add('active');
   setDots(2);
 }
 function showFinalResult(pattern){
-  document.getElementById('q2-A').style.display = 'none';
-  document.getElementById('q2-B').style.display = 'none';
-
-  const box = document.querySelector('.diagnostic');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.getElementById('q2-A').classList.remove('active');
+  document.getElementById('q2-B').classList.remove('active');
   const area = document.getElementById('res-' + pattern);
-
-  if(reduceMotion){
-    area.classList.add('show');
-    setDots(3);
-    area.scrollIntoView({behavior:'smooth', block:'start'});
-    return;
-  }
-
-  box.classList.add('crack');
-  const flash = document.createElement('div');
-  flash.className = 'ice-flash';
-  box.appendChild(flash);
-
-  setTimeout(()=>{
-    box.classList.remove('crack');
-    flash.remove();
-    area.classList.add('show');
-    setDots(3);
-    area.scrollIntoView({behavior:'smooth', block:'start'});
-    launchIceBurst(area);
-  }, 480);
-}
-
-/* ===================== 氷の弾け散りバースト ===================== */
-function launchIceBurst(container){
-  const old = container.querySelector('.ice-burst-canvas');
-  if(old) old.remove();
-  const canvas = document.createElement('canvas');
-  canvas.className = 'ice-burst-canvas';
-  canvas.style.cssText = 'position:absolute; pointer-events:none; z-index:20;';
-  container.style.position = container.style.position || 'relative';
-  container.appendChild(canvas);
-
-  const rect = container.getBoundingClientRect();
-  const W = rect.width, H = Math.min(rect.height, 360);
-  const PAD = 60;
-  canvas.width  = W + PAD * 2;
-  canvas.height = H + PAD * 2;
-  canvas.style.width  = canvas.width + 'px';
-  canvas.style.height = canvas.height + 'px';
-  canvas.style.left = -PAD + 'px';
-  canvas.style.top  = -PAD + 'px';
-
-  const ctx = canvas.getContext('2d');
-  const colors = ['#6FA1E2', '#3077D5', '#AFCAEF', '#4585D9', '#ffffff'];
-  const particles = [];
-  const cx = PAD + W / 2, cy = PAD + H * 0.28;
-  for(let i=0; i<130; i++){
-    const angle = Math.random() * Math.PI * 2;
-    const speed = 6 + Math.random() * 13;
-    particles.push({
-      x: cx, y: cy,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - 3,
-      size: 6 + Math.random() * 9,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      rot: Math.random() * Math.PI * 2,
-      vrot: (Math.random() - 0.5) * 0.32,
-      gravity: 0.2 + Math.random() * 0.12,
-      shard: Math.random() < 0.5
-    });
-  }
-  const CW = canvas.width, CH = canvas.height;
-  let frame = 0;
-  function animate(){
-    ctx.clearRect(0, 0, CW, CH);
-    let alive = false;
-    particles.forEach(p=>{
-      p.x += p.vx; p.y += p.vy; p.rot += p.vrot; p.vy += p.gravity; p.vx *= 0.99;
-      if(p.y < CH + 10) alive = true;
-      ctx.save();
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot);
-      ctx.fillStyle = p.color;
-      ctx.globalAlpha = Math.max(0, 1 - frame / 110);
-      if(p.shard){
-        ctx.beginPath();
-        ctx.moveTo(0, -p.size);
-        ctx.lineTo(p.size * 0.6, p.size * 0.6);
-        ctx.lineTo(-p.size * 0.6, p.size * 0.6);
-        ctx.closePath();
-        ctx.fill();
-      }else{
-        ctx.beginPath();
-        ctx.arc(0, 0, p.size * 0.5, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      ctx.restore();
-    });
-    frame++;
-    if(alive && frame < 130){
-      requestAnimationFrame(animate);
-    }else{
-      canvas.remove();
-    }
-  }
-  animate();
+  area.classList.add('show');
+  setDots(3);
+  area.scrollIntoView({behavior:'smooth', block:'start'});
 }
 function resetQuiz(){
-  document.querySelectorAll('.result-area').forEach(r=>r.classList.remove('show'));
-  document.querySelectorAll('.ice-burst-canvas').forEach(c=>c.remove());
-  document.getElementById('q2-A').style.display = 'none';
-  document.getElementById('q2-B').style.display = 'none';
-  document.getElementById('q1').style.display = 'block';
+  document.querySelectorAll('.hy-result-area').forEach(r=>r.classList.remove('show'));
+  document.getElementById('q2-A').classList.remove('active');
+  document.getElementById('q2-B').classList.remove('active');
+  document.getElementById('q1').classList.add('active');
   setDots(1);
   document.getElementById('diagnosis').scrollIntoView({behavior:'smooth', block:'start'});
 }
-
-/* ===================== ハンバーガーメニュー ===================== */
-const navToggle = document.getElementById('navToggle');
-const navLinks = document.getElementById('navLinks');
-function closeNav(){
-  navLinks.classList.remove('open');
-  navToggle.setAttribute('aria-expanded','false');
-}
-function toggleNav(){
-  const isOpen = navLinks.classList.toggle('open');
-  navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-}
-navToggle.addEventListener('click', toggleNav);
-navLinks.querySelectorAll('a').forEach(a=>a.addEventListener('click', closeNav));
-document.addEventListener('click', e=>{
-  if(navLinks.classList.contains('open') && !navLinks.contains(e.target) && !navToggle.contains(e.target)){
-    closeNav();
-  }
-});
-window.addEventListener('resize', ()=>{ if(window.innerWidth > 640) closeNav(); });
-
-/* ===================== ひんやり結晶パーティクル ===================== */
-(function(){
-  const field = document.getElementById('crystalField');
-  if(!field) return;
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const count = reduceMotion ? 0 : (window.innerWidth < 640 ? 10 : 18);
-  const crystalSVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M12 2v20M4.2 6l15.6 12M19.8 6 4.2 18M12 2l-3 3M12 2l3 3M12 22l-3-3M12 22l3-3M4.2 6l4 .6M4.2 6l1.4-3.8M19.8 6l-4 .6M19.8 6l-1.4-3.8M4.2 18l4-.6M4.2 18l1.4 3.8M19.8 18l-4-.6M19.8 18l-1.4 3.8"/></svg>';
-  let html = '';
-  for(let i=0;i<count;i++){
-    const size = (Math.random()*14+8).toFixed(0);
-    const left = (Math.random()*100).toFixed(1);
-    const duration = (Math.random()*10+14).toFixed(1);
-    const delay = (Math.random()*-20).toFixed(1);
-    const drift = (Math.random()*80-40).toFixed(0);
-    const opacity = (Math.random()*.35+.25).toFixed(2);
-    html += `<span class="crystal" style="--x:${left}%; --s:${size}px; --dur:${duration}s; --delay:${delay}s; --drift:${drift}px; --op:${opacity};">${crystalSVG}</span>`;
-  }
-  field.innerHTML = html;
-})();
-
-/* ===================== スクロール演出 ===================== */
-const gauge = document.getElementById('coolGauge');
-const miniNav = document.querySelector('.mini-nav');
-const heroEl = document.querySelector('.hero');
-function updateGauge(){
-  const h = document.documentElement;
-  const pct = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
-  gauge.style.width = Math.min(100, Math.max(0,pct)) + '%';
-  if(miniNav && heroEl){
-    const threshold = heroEl.offsetHeight * 0.6;
-    miniNav.classList.toggle('visible', h.scrollTop > threshold);
-  }
-}
-document.addEventListener('scroll', updateGauge, {passive:true});
-updateGauge();
-
-const revealEls = document.querySelectorAll('.reveal');
-if('IntersectionObserver' in window){
-  try{
-    const io = new IntersectionObserver(entries=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, {threshold:.12});
-    revealEls.forEach(el=>io.observe(el));
-  }catch(err){
-    revealEls.forEach(el=>el.classList.add('in'));
-  }
-}else{
-  /* 非対応ブラウザではフェードインなしで即表示（コンテンツが消えたままにならないようにする安全策） */
-  revealEls.forEach(el=>el.classList.add('in'));
-}
-/* 万一何らかの理由で数秒後も表示されないセクションがあれば、強制的に表示する保険 */
-setTimeout(()=>{ revealEls.forEach(el=>el.classList.add('in')); }, 2500);
 </script>
-
 </body>
 </html>

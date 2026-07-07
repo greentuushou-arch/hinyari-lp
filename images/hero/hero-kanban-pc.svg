@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+  <rect width="1200" height="700" fill="#EEF4FC"/>
+  <rect x="12" y="12" width="1176" height="676" fill="none" stroke="#3077D5" stroke-width="6" stroke-dasharray="18 12"/>
+  <circle cx="600" cy="280" r="46" fill="#3077D5"/>
+  <text x="50%" y="290" text-anchor="middle" font-family="sans-serif" font-size="34" fill="#fff">画</text>
+  <text x="50%" y="360" text-anchor="middle" font-family="sans-serif" font-size="30" font-weight="bold" fill="#17325A">FVメインビジュアル(PC/横長)</text>
+  <text x="50%" y="396" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#5B6B79">見出し・キャッチコピーを画像内に入れる想定</text>
+  <text x="50%" y="428" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#9aa"></text>
+</svg>
