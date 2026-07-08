@@ -81,7 +81,23 @@ body{
 }
 img{ max-width:100%; display:block; }
 
-.hy-wrap{ max-width:750px; margin:0 auto; background:#fff; overflow:hidden; }
+.hy-wrap{
+  max-width:750px; margin:0 auto; background:#fff; overflow:hidden;
+  /* 左右の端を波型(なみなみ)にカット */
+  --scallop:16px;
+  -webkit-mask-image:
+    radial-gradient(circle var(--scallop) at var(--scallop) 0, transparent calc(var(--scallop) - 1px), #000 var(--scallop)),
+    radial-gradient(circle var(--scallop) at calc(100% - var(--scallop)) 0, transparent calc(var(--scallop) - 1px), #000 var(--scallop));
+  mask-image:
+    radial-gradient(circle var(--scallop) at var(--scallop) 0, transparent calc(var(--scallop) - 1px), #000 var(--scallop)),
+    radial-gradient(circle var(--scallop) at calc(100% - var(--scallop)) 0, transparent calc(var(--scallop) - 1px), #000 var(--scallop));
+  -webkit-mask-repeat: repeat-y, repeat-y;
+  mask-repeat: repeat-y, repeat-y;
+  -webkit-mask-size: 100% calc(var(--scallop) * 2);
+  mask-size: 100% calc(var(--scallop) * 2);
+  -webkit-mask-composite: source-in, source-in;
+  mask-composite: intersect, intersect;
+}
 .hy-inner{ padding:0 20px; }
 
 a.hy-cta{
@@ -133,7 +149,9 @@ a.hy-cta{
 .hy-diag-kuma-row{ display:flex; align-items:flex-end; justify-content:center; gap:10px; margin-bottom:10px; }
 .hy-diag-kuma-row .hy-diag-kuma-gap{ width:18px; flex:none; }
 .hy-diag-kuma{
-  width:48px; height:auto; opacity:.95; flex:none;
+  /* 元画像の縦横比がバラバラなので、同じ箱にcontainで収めて見た目のサイズを揃える */
+  width:56px; height:56px; object-fit:contain; object-position:center bottom;
+  opacity:.95; flex:none;
   animation:hy-kuma-bounce 1.3s ease-in-out infinite;
 }
 .hy-diag-kuma.k1{ animation-delay:0s; }
@@ -545,7 +563,7 @@ a.hy-cta-ghost{
   .hy-result-prod-grid{ grid-template-columns:repeat(2,1fr); }
   .hy-lineup-grid{ grid-template-columns:repeat(3,1fr); }
 
-  .hy-diag-kuma{ width:64px; }
+  .hy-diag-kuma{ width:76px; height:76px; }
   .hy-diag-kuma-row{ gap:16px; }
   .hy-diag-kuma-row .hy-diag-kuma-gap{ width:28px; }
 }
