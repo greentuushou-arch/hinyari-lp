@@ -94,7 +94,8 @@ a.hy-cta{
 
 /* ---------- ヘッダー ---------- */
 .hy-header{
-  position:sticky; top:0; z-index:60;
+  /* .hy-wrapのoverflow:hiddenがposition:stickyを無効化するためfixedを使用 */
+  position:fixed; top:0; left:0; right:0; z-index:60;
   background:#fff;
   padding:10px 20px;
   text-align:center;
@@ -102,6 +103,7 @@ a.hy-cta{
   border-image:linear-gradient(90deg, var(--pink-400), #B98CFF, var(--glacier-500), var(--yellow-400)) 1;
 }
 .hy-header-logo{ height:34px; width:auto; margin:0 auto; }
+.hy-header-spacer{ height:57px; }
 
 /* ---------- 共通セクション ---------- */
 .hy-section{ padding:48px 0; }
@@ -481,9 +483,11 @@ a.hy-cta-ghost{
 .hy-footer-note{ background:var(--frost-50); padding:36px 20px 44px; text-align:center; font-size:.78rem; color:var(--ink-soft); }
 .hy-footer-note a{ color:var(--arctic-700); font-weight:700; }
 
-/* ---------- スマホ追従CTA ---------- */
+/* ---------- 追従CTA(常時表示) ---------- */
 .hy-sticky-cta{
-  position:sticky; bottom:0; z-index:50;
+  /* .hy-wrapのoverflow:hiddenがposition:stickyを無効化するためfixedを使用 */
+  position:fixed; bottom:0; left:50%; transform:translateX(-50%); z-index:50;
+  width:100%; max-width:750px;
   padding:10px; background:rgba(255,255,255,.96);
   border-top:2px solid var(--glacier-500); box-shadow:0 -3px 10px rgba(0,0,0,.12);
 }
@@ -514,6 +518,8 @@ a.hy-cta-ghost{
   <header class="hy-header">
     <img src="images/header/logo-oyasumi.png" alt="枕と眠りのおやすみショップ！" class="hy-header-logo">
   </header>
+  <!-- ヘッダーがposition:fixedのため、その高さ分のスペーサー -->
+  <div class="hy-header-spacer"></div>
 
   <!-- ============================================================
        1. ファーストビュー
