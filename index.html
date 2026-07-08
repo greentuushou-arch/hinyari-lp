@@ -374,7 +374,17 @@ a.hy-cta{
 .hy-qa-a{ font-size:.84rem; color:var(--ink-soft); display:flex; gap:10px; line-height:1.9; }
 .hy-qa-mark-q{ color:var(--sand-deep); font-weight:700; font-size:1.1rem; flex:none; }
 .hy-qa-mark-a{ color:var(--glacier-700); font-weight:700; font-size:1.1rem; flex:none; }
-.hy-qa-products{ margin-top:14px; }
+.hy-qa-products{ margin-top:14px; grid-template-columns:1fr; }
+.hy-qa-products .hy-prod-card{
+  flex-direction:row; align-items:center; gap:12px;
+  border-radius:4px; padding:10px;
+}
+.hy-qa-products .hy-prod-thumb{ width:56px; height:56px; aspect-ratio:auto; flex:none; border-radius:4px; }
+.hy-qa-products .hy-prod-thumb svg{ width:28px; height:28px; }
+.hy-qa-products .hy-prod-cool-badge{ font-size:.52rem; padding:2px 5px; }
+.hy-qa-products .hy-prod-body{ padding:0; flex:1; min-width:0; }
+.hy-qa-products .hy-prod-name{ min-height:0; margin-top:3px; }
+.hy-qa-products .hy-prod-link-row{ margin-top:6px; }
 
 /* ---------- 組み合わせ提案 ---------- */
 .hy-combo-box{
