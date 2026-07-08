@@ -59,11 +59,8 @@ body{
   font-family:"Futura","Josefin Sans","Hiragino Kaku Gothic ProN","Hiragino Sans","Hiragino Kaku Gothic StdN",sans-serif;
   color:var(--ink);
   background:
-    radial-gradient(circle at 10% 10%, rgba(255,180,212,.6), transparent 45%),
-    radial-gradient(circle at 90% 15%, rgba(190,165,255,.55), transparent 45%),
-    radial-gradient(circle at 88% 92%, rgba(150,195,255,.55), transparent 45%),
-    radial-gradient(circle at 10% 92%, rgba(255,222,140,.5), transparent 45%),
-    linear-gradient(160deg, #FBF3FF, #EEF4FF);
+    radial-gradient(circle, rgba(255,255,255,.4) 1.5px, transparent 1.5px) 0 0/26px 26px,
+    #99ccff;
   line-height:1.85;
   -webkit-text-size-adjust:100%;
 }
@@ -124,9 +121,33 @@ a.hy-cta{
   padding:26px 0 32px;
   text-align:center;
 }
-.hy-hero-img-frame{ margin:0 0 20px; position:relative; }
+.hy-hero-img-frame{ margin:0 0 20px; position:relative; overflow:hidden; }
 .hy-hero-img-frame img{ width:100%; height:auto; }
 .hy-hero-img-frame .hy-hero-img-pc{ display:none; }
+
+/* ひんやり感のあるフロストワイプ演出: かわすいLPの細いシャインとは違い、
+   幅広でぼかしの効いた白い帯が、鏡の結露を拭うようにゆっくり通り過ぎる(JS使用) */
+.hy-hero-img-frame::after{
+  content:"";
+  position:absolute; top:0; left:-75%;
+  width:55%; height:100%;
+  background:linear-gradient(100deg,
+    transparent 0%,
+    rgba(255,255,255,.18) 18%,
+    rgba(255,255,255,.9) 46%,
+    rgba(255,255,255,.9) 56%,
+    rgba(255,255,255,.18) 82%,
+    transparent 100%);
+  filter:blur(7px);
+  pointer-events:none;
+}
+.hy-hero-img-frame.hy-shine-play::after{
+  animation:hy-frost-wipe 1.9s cubic-bezier(.4,0,.2,1);
+}
+@keyframes hy-frost-wipe{
+  0%{ left:-75%; }
+  100%{ left:120%; }
+}
 .hy-hero-content{ padding:0 20px; }
 .hy-hero-copy{
   font-size:.92rem; color:var(--ink-soft); margin:0 0 22px; line-height:1.9;
@@ -493,13 +514,13 @@ a.hy-cta{
 
   <!-- ============================================================
        1. ファーストビュー
-       ▼FVメインビジュアル差し替え箇所: images/hero/hero-kanban-pc.svg / hero-kanban-sp.svg
+       ▼FVメインビジュアル差し替え箇所: images/hero/hinyari-kanban-pc.jpg / hinyari-kanban-sp.jpg
        ============================================================ -->
   <section class="hy-hero">
     <!-- スマホ幅(767px以下)は縦長、768px以上は横長バナーを表示 -->
     <div class="hy-hero-img-frame">
-      <img src="images/hero/hero-kanban-sp.svg" alt="熱帯夜も、快適に、寝たいや！夏の快眠寝具特集" class="hy-hero-img-sp">
-      <img src="images/hero/hero-kanban-pc.svg" alt="熱帯夜も、快適に、寝たいや！夏の快眠寝具特集" class="hy-hero-img-pc">
+      <img src="images/hero/hinyari-kanban-sp.jpg" alt="熱帯夜も、快適に、寝たいや！夏の快眠寝具特集" class="hy-hero-img-sp">
+      <img src="images/hero/hinyari-kanban-pc.jpg" alt="熱帯夜も、快適に、寝たいや！夏の快眠寝具特集" class="hy-hero-img-pc">
     </div>
     <div class="hy-hero-content">
       <p class="hy-hero-copy">「暑くて起きる」のも「冷えすぎてダルい」のも、もう終わりにしませんか。<br>睡眠改善インストラクター監修、あなたにぴったりのひんやり寝具が見つかります。</p>
@@ -981,6 +1002,25 @@ function resetQuiz(){
   }
 
   setTimeout(()=>{ playShine(); scheduleNext(); }, 900 + Math.random() * 500);
+})();
+
+/* ===================== FV看板のフロストワイプをランダムな間隔で再生 ===================== */
+(function(){
+  const frame = document.querySelector('.hy-hero-img-frame');
+  if(!frame){ return; }
+
+  function playWipe(){
+    frame.classList.remove('hy-shine-play');
+    void frame.offsetWidth;
+    frame.classList.add('hy-shine-play');
+  }
+
+  function scheduleNext(){
+    const delay = 3400 + Math.random() * 3200; // 3.4秒〜6.6秒でランダムに次のワイプを予約
+    setTimeout(()=>{ playWipe(); scheduleNext(); }, delay);
+  }
+
+  setTimeout(()=>{ playWipe(); scheduleNext(); }, 700 + Math.random() * 500);
 })();
 </script>
 </body>
