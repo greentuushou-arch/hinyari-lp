@@ -128,6 +128,23 @@ a.hy-cta{
   text-align:center; color:var(--ink-soft); font-size:.86rem; margin:16px 0 0;
 }
 
+/* 診断タイトルの両脇でゆらゆら揺れるクマ */
+.hy-diag-title-wrap{ position:relative; }
+.hy-diag-title-wrap .hy-section-title{ position:relative; z-index:1; }
+.hy-diag-kuma{
+  position:absolute; width:34px; height:auto; opacity:.9;
+  pointer-events:none; z-index:0;
+  animation:hy-kuma-sway 3.2s ease-in-out infinite;
+}
+.hy-diag-kuma.k1{ left:-4px; top:6px; animation-delay:0s; }
+.hy-diag-kuma.k2{ left:2px; top:64px; width:28px; animation-delay:.8s; }
+.hy-diag-kuma.k3{ right:-4px; top:6px; animation-delay:1.6s; }
+.hy-diag-kuma.k4{ right:2px; top:64px; width:28px; animation-delay:2.4s; }
+@keyframes hy-kuma-sway{
+  0%,100%{ transform:translateY(0) rotate(-2deg); }
+  50%{ transform:translateY(-6px) rotate(2deg); }
+}
+
 /* ---------- 1. ファーストビュー ---------- */
 .hy-hero{
   position:relative;
@@ -358,6 +375,28 @@ a.hy-cta-ghost{
 }
 .hy-timeline-item > *{ text-align:left; }
 
+/* 時間帯ごとの背景色: 22時=ネイビー / 1時=ブルー / 4時=明け方オレンジ */
+.hy-timeline-item.is-night{ background:var(--arctic-900); border-left-color:var(--glacier-300); }
+.hy-timeline-item.is-mid{ background:var(--glacier-700); border-left-color:#fff; }
+.hy-timeline-item.is-dawn{ background:linear-gradient(135deg,#FFE3B8,#FFC08A); border-left-color:var(--sand-deep); }
+
+.hy-timeline-item.is-night .hy-timeline-time,
+.hy-timeline-item.is-night .hy-timeline-scene,
+.hy-timeline-item.is-night .hy-timeline-text,
+.hy-timeline-item.is-mid .hy-timeline-time,
+.hy-timeline-item.is-mid .hy-timeline-scene,
+.hy-timeline-item.is-mid .hy-timeline-text{
+  color:#fff;
+}
+.hy-timeline-item.is-night .hy-timeline-mechanism,
+.hy-timeline-item.is-mid .hy-timeline-mechanism{
+  background:rgba(255,255,255,.14); color:#fff; border-left-color:rgba(255,255,255,.6);
+}
+.hy-timeline-item.is-night .hy-clock,
+.hy-timeline-item.is-mid .hy-clock{
+  box-shadow:0 4px 10px rgba(0,0,0,.35);
+}
+
 /* かわいい時計(CSSのみ、秒針が小さくコトコト揺れる) */
 .hy-clock{
   position:relative;
@@ -505,6 +544,13 @@ a.hy-cta-ghost{
 
   .hy-result-prod-grid{ grid-template-columns:repeat(2,1fr); }
   .hy-lineup-grid{ grid-template-columns:repeat(3,1fr); }
+
+  .hy-diag-kuma{ width:56px; }
+  .hy-diag-kuma.k2, .hy-diag-kuma.k4{ width:46px; }
+  .hy-diag-kuma.k1{ left:-40px; }
+  .hy-diag-kuma.k2{ left:-30px; }
+  .hy-diag-kuma.k3{ right:-40px; }
+  .hy-diag-kuma.k4{ right:-30px; }
 }
 </style>
 </head>
@@ -565,7 +611,13 @@ a.hy-cta-ghost{
   <section id="diagnosis" class="hy-section hy-section-frost">
     <div class="hy-inner">
       <span class="hy-section-eyebrow">DIAGNOSIS</span>
-      <h2 class="hy-section-title">まずは30秒で判別。<br>あなたの「寝たいや」タイプ診断</h2>
+      <div class="hy-diag-title-wrap">
+        <img src="images/results/kuma1.png" alt="" class="hy-diag-kuma k1" aria-hidden="true">
+        <img src="images/results/kuma2.png" alt="" class="hy-diag-kuma k2" aria-hidden="true">
+        <h2 class="hy-section-title">まずは30秒で判別。<br>あなたの「寝たいや」タイプ診断</h2>
+        <img src="images/results/kuma3.png" alt="" class="hy-diag-kuma k3" aria-hidden="true">
+        <img src="images/results/kuma4.png" alt="" class="hy-diag-kuma k4" aria-hidden="true">
+      </div>
       <p class="hy-section-lead">2つの質問に答えるだけで、今夜からの寝具選びがはっきりします。</p>
 
       <div class="hy-diagnostic">
@@ -653,7 +705,7 @@ a.hy-cta-ghost{
       <p class="hy-section-lead">時間帯によって、寝苦しさの正体は変わります。原因を知れば、対策はもっとシンプルに。</p>
 
       <div class="hy-timeline">
-        <article class="hy-timeline-item">
+        <article class="hy-timeline-item is-night">
           <div class="hy-clock hy-clock-2200" aria-hidden="true">
             <span class="hy-clock-moon">🌙</span>
             <span class="hy-clock-hand-hour"></span>
@@ -668,7 +720,7 @@ a.hy-cta-ghost{
           <div class="hy-prod-grid" data-products="1,6"></div>
         </article>
 
-        <article class="hy-timeline-item">
+        <article class="hy-timeline-item is-mid">
           <div class="hy-clock hy-clock-0100" aria-hidden="true">
             <span class="hy-clock-moon">🌙</span>
             <span class="hy-clock-hand-hour"></span>
@@ -683,7 +735,7 @@ a.hy-cta-ghost{
           <div class="hy-prod-grid" data-products="3,13"></div>
         </article>
 
-        <article class="hy-timeline-item">
+        <article class="hy-timeline-item is-dawn">
           <div class="hy-clock hy-clock-0400" aria-hidden="true">
             <span class="hy-clock-moon">🌙</span>
             <span class="hy-clock-hand-hour"></span>
