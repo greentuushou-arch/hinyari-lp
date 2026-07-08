@@ -135,16 +135,21 @@ a.hy-cta{
 .hy-diag-kuma{
   /* 元画像の縦横比がバラバラなので、同じ箱にcontainで収めて見た目のサイズを揃える */
   width:56px; height:56px; object-fit:contain; object-position:center bottom;
-  opacity:.95; flex:none;
-  animation:hy-kuma-bounce 1.3s ease-in-out infinite;
+  flex:none;
+  opacity:0; transform:scale(.3) translateY(14px);
 }
-.hy-diag-kuma.k1{ animation-delay:0s; }
-.hy-diag-kuma.k2{ animation-delay:.15s; }
-.hy-diag-kuma.k3{ animation-delay:.3s; }
-.hy-diag-kuma.k4{ animation-delay:.45s; }
-@keyframes hy-kuma-bounce{
-  0%,100%{ transform:translateY(0); }
-  50%{ transform:translateY(-10px); }
+/* スクロールで診断セクションが見えたら、1匹ずつポップインして止まる(JSでis-inを付与) */
+.hy-diag-kuma-row.is-in .hy-diag-kuma{
+  animation:hy-kuma-popin .55s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+.hy-diag-kuma-row.is-in .hy-diag-kuma.k1{ animation-delay:.05s; }
+.hy-diag-kuma-row.is-in .hy-diag-kuma.k2{ animation-delay:.4s; }
+.hy-diag-kuma-row.is-in .hy-diag-kuma.k3{ animation-delay:.75s; }
+.hy-diag-kuma-row.is-in .hy-diag-kuma.k4{ animation-delay:1.1s; }
+@keyframes hy-kuma-popin{
+  0%{ opacity:0; transform:scale(.3) translateY(14px); }
+  70%{ opacity:1; transform:scale(1.1) translateY(-3px); }
+  100%{ opacity:1; transform:scale(1) translateY(0); }
 }
 
 /* ---------- 1. ファーストビュー ---------- */
@@ -1061,6 +1066,26 @@ function resetQuiz(){
   }
 
   setTimeout(()=>{ playWipe(); scheduleNext(); }, 700 + Math.random() * 500);
+})();
+
+/* ===================== クマが診断セクションに入ったら1回だけポップイン ===================== */
+(function(){
+  const row = document.querySelector('.hy-diag-kuma-row');
+  if(!row){ return; }
+
+  if('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting){
+          row.classList.add('is-in');
+          io.unobserve(row);
+        }
+      });
+    }, {threshold:.4});
+    io.observe(row);
+  }else{
+    row.classList.add('is-in');
+  }
 })();
 </script>
 </body>
