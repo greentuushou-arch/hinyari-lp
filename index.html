@@ -81,23 +81,7 @@ body{
 }
 img{ max-width:100%; display:block; }
 
-.hy-wrap{
-  max-width:750px; margin:0 auto; background:#fff; overflow:hidden;
-  /* 左右の端を波型(なみなみ)にカット */
-  --scallop:16px;
-  -webkit-mask-image:
-    radial-gradient(circle var(--scallop) at var(--scallop) 0, transparent calc(var(--scallop) - 1px), #000 var(--scallop)),
-    radial-gradient(circle var(--scallop) at calc(100% - var(--scallop)) 0, transparent calc(var(--scallop) - 1px), #000 var(--scallop));
-  mask-image:
-    radial-gradient(circle var(--scallop) at var(--scallop) 0, transparent calc(var(--scallop) - 1px), #000 var(--scallop)),
-    radial-gradient(circle var(--scallop) at calc(100% - var(--scallop)) 0, transparent calc(var(--scallop) - 1px), #000 var(--scallop));
-  -webkit-mask-repeat: repeat-y, repeat-y;
-  mask-repeat: repeat-y, repeat-y;
-  -webkit-mask-size: 100% calc(var(--scallop) * 2);
-  mask-size: 100% calc(var(--scallop) * 2);
-  -webkit-mask-composite: source-in, source-in;
-  mask-composite: intersect, intersect;
-}
+.hy-wrap{ max-width:750px; margin:0 auto; background:#fff; overflow:hidden; }
 .hy-inner{ padding:0 20px; }
 
 a.hy-cta{
