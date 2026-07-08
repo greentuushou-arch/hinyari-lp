@@ -128,21 +128,21 @@ a.hy-cta{
   text-align:center; color:var(--ink-soft); font-size:.86rem; margin:16px 0 0;
 }
 
-/* 診断タイトルの両脇でゆらゆら揺れるクマ */
-.hy-diag-title-wrap{ position:relative; }
-.hy-diag-title-wrap .hy-section-title{ position:relative; z-index:1; }
+/* 診断タイトル上に一列で並び、軽く跳ねるクマ */
+.hy-diag-title-wrap{ display:flex; flex-direction:column; align-items:center; }
+.hy-diag-kuma-row{ display:flex; align-items:flex-end; justify-content:center; gap:10px; margin-bottom:10px; }
+.hy-diag-kuma-row .hy-diag-kuma-gap{ width:18px; flex:none; }
 .hy-diag-kuma{
-  position:absolute; width:34px; height:auto; opacity:.9;
-  pointer-events:none; z-index:0;
-  animation:hy-kuma-sway 3.2s ease-in-out infinite;
+  width:48px; height:auto; opacity:.95; flex:none;
+  animation:hy-kuma-bounce 1.3s ease-in-out infinite;
 }
-.hy-diag-kuma.k1{ left:-4px; top:6px; animation-delay:0s; }
-.hy-diag-kuma.k2{ left:2px; top:64px; width:28px; animation-delay:.8s; }
-.hy-diag-kuma.k3{ right:-4px; top:6px; animation-delay:1.6s; }
-.hy-diag-kuma.k4{ right:2px; top:64px; width:28px; animation-delay:2.4s; }
-@keyframes hy-kuma-sway{
-  0%,100%{ transform:translateY(0) rotate(-2deg); }
-  50%{ transform:translateY(-6px) rotate(2deg); }
+.hy-diag-kuma.k1{ animation-delay:0s; }
+.hy-diag-kuma.k2{ animation-delay:.15s; }
+.hy-diag-kuma.k3{ animation-delay:.3s; }
+.hy-diag-kuma.k4{ animation-delay:.45s; }
+@keyframes hy-kuma-bounce{
+  0%,100%{ transform:translateY(0); }
+  50%{ transform:translateY(-10px); }
 }
 
 /* ---------- 1. ファーストビュー ---------- */
@@ -545,12 +545,9 @@ a.hy-cta-ghost{
   .hy-result-prod-grid{ grid-template-columns:repeat(2,1fr); }
   .hy-lineup-grid{ grid-template-columns:repeat(3,1fr); }
 
-  .hy-diag-kuma{ width:56px; }
-  .hy-diag-kuma.k2, .hy-diag-kuma.k4{ width:46px; }
-  .hy-diag-kuma.k1{ left:-40px; }
-  .hy-diag-kuma.k2{ left:-30px; }
-  .hy-diag-kuma.k3{ right:-40px; }
-  .hy-diag-kuma.k4{ right:-30px; }
+  .hy-diag-kuma{ width:64px; }
+  .hy-diag-kuma-row{ gap:16px; }
+  .hy-diag-kuma-row .hy-diag-kuma-gap{ width:28px; }
 }
 </style>
 </head>
@@ -612,11 +609,14 @@ a.hy-cta-ghost{
     <div class="hy-inner">
       <span class="hy-section-eyebrow">DIAGNOSIS</span>
       <div class="hy-diag-title-wrap">
-        <img src="images/results/kuma1.png" alt="" class="hy-diag-kuma k1" aria-hidden="true">
-        <img src="images/results/kuma2.png" alt="" class="hy-diag-kuma k2" aria-hidden="true">
+        <div class="hy-diag-kuma-row" aria-hidden="true">
+          <img src="images/results/kuma1.png" alt="" class="hy-diag-kuma k1">
+          <img src="images/results/kuma2.png" alt="" class="hy-diag-kuma k2">
+          <span class="hy-diag-kuma-gap"></span>
+          <img src="images/results/kuma3.png" alt="" class="hy-diag-kuma k3">
+          <img src="images/results/kuma4.png" alt="" class="hy-diag-kuma k4">
+        </div>
         <h2 class="hy-section-title">まずは30秒で判別。<br>あなたの「寝たいや」タイプ診断</h2>
-        <img src="images/results/kuma3.png" alt="" class="hy-diag-kuma k3" aria-hidden="true">
-        <img src="images/results/kuma4.png" alt="" class="hy-diag-kuma k4" aria-hidden="true">
       </div>
       <p class="hy-section-lead">2つの質問に答えるだけで、今夜からの寝具選びがはっきりします。</p>
 
