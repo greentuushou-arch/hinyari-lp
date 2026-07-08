@@ -127,6 +127,10 @@ a.hy-cta{
 .hy-section-lead{
   text-align:center; color:var(--ink-soft); font-size:.86rem; margin:16px 0 0;
 }
+.hy-title-x{
+  font-family:"Josefin Sans",sans-serif; font-weight:300; font-size:1.3em;
+  display:inline-block; vertical-align:-0.03em;
+}
 
 /* 診断タイトル上に一列で並び、軽く跳ねるクマ */
 .hy-diag-title-wrap{ display:flex; flex-direction:column; align-items:center; }
@@ -485,9 +489,12 @@ a.hy-cta-ghost{
 }
 .hy-combo-box h3{ color:var(--arctic-900); font-size:1.05rem; margin:0 0 12px; font-weight:700; }
 .hy-combo-box > p{ color:var(--ink-soft); font-size:.84rem; margin:0 0 20px; }
-.hy-combo-visual{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
-.hy-combo-visual .hy-prod-card{ flex:1 1 140px; }
-.hy-combo-plus{ font-size:1.2rem; color:var(--sand-deep); font-weight:900; }
+.hy-combo-visual{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; margin-bottom:20px; }
+.hy-combo-visual .hy-prod-card{ width:100%; max-width:220px; }
+.hy-combo-plus{
+  font-family:"Josefin Sans",sans-serif; font-size:2rem; line-height:1;
+  color:var(--sand-deep); font-weight:300;
+}
 
 /* ---------- レビュー ---------- */
 .hy-review-note{
@@ -555,6 +562,9 @@ a.hy-cta-ghost{
   .hy-diag-kuma{ width:76px; height:76px; }
   .hy-diag-kuma-row{ gap:16px; }
   .hy-diag-kuma-row .hy-diag-kuma-gap{ width:28px; }
+
+  .hy-combo-visual{ flex-direction:row; flex-wrap:wrap; gap:14px; }
+  .hy-combo-visual .hy-prod-card{ flex:1 1 140px; width:auto; max-width:none; }
 }
 </style>
 </head>
@@ -797,7 +807,7 @@ a.hy-cta-ghost{
   <section id="combo" class="hy-section hy-section-white">
     <div class="hy-inner">
       <span class="hy-section-eyebrow">BEST COMBO</span>
-      <h2 class="hy-section-title">敷きパッド(下)× 掛け布団(上)の<br>サンドイッチが最強</h2>
+      <h2 class="hy-section-title">敷きパッド(下)<span class="hy-title-x">×</span> 掛け布団(上)の<br>サンドイッチが最強</h2>
       <div class="hy-combo-box">
         <div class="hy-combo-visual" id="comboVisual"></div>
         <p>診断結果をベースにしつつ、時間帯ごとの悩みに合わせて「上と下」を賢く組み合わせるのがプロの最適解です。下からは背中の熱を逃がし、上からはエアコンの直風を防ぐ。これぞ最強の「寝たいや」スタイルです。</p>
@@ -1036,7 +1046,9 @@ function showFinalResult(pattern){
   document.getElementById('q2-B').classList.remove('active');
   const area = document.getElementById('res-' + pattern);
   area.classList.add('show');
-  area.scrollIntoView({behavior:'smooth', block:'start'});
+  const headerOffset = 57 + 12; // 固定ヘッダーの高さ + 少し余白
+  const top = area.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+  window.scrollTo({ top, behavior:'smooth' });
   const card = area.querySelector('.hy-result-card');
   if(card){ burstConfetti(card); }
 }
